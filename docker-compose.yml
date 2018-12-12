@@ -1,0 +1,64 @@
+version: '3.6'
+
+services:
+  users:
+    image: ${DOCKER_REGISTRY}sannelhouseusers:beta
+    networks: 
+      housenet:
+        aliases:
+          - "users.house.dev.local"
+    ports:
+      - "80:80"
+    volumes:
+      - "./RunData/users/app_config:c:/app/app_config"
+      - "./RunData/users/app_data:c:/app/app_data"
+
+  devices:
+    image: ${DOCKER_REGISTRY}sannelhousedevices:beta-v1
+    build:
+      context: .
+      dockerfile: src/Sannel.House.Devices/Dockerfile
+      args:
+        USER: "${USER}"
+    networks:
+      housenet:
+        aliases:
+          - "devices.house.dev.local"
+    ports:
+      - "81:80"
+    volumes:
+      - "./RunData/devices/app_config:c:/app/app_config"
+      - "./RunData/devices/app_data:c:/app/app_data"
+    depends_on:
+      - users
+
+  tests:
+    image: ${DOCKER_REGISTRY}sannelhousesensorentries:tests-${SANNEL_ARCH}
+    ports:
+      - "8080:80"
+    build:
+      context: .
+      dockerfile: src/Sannel.House.SensorEntries.Tests/Dockerfile
+    networks:
+      - housenet
+
+  sensorentries:
+    image: ${DOCKER_REGISTRY}sannelhousesensorentries:${SANNEL_VERSION}-beta-${SANNEL_ARCH}
+    build:
+      context: .
+      dockerfile: src/Sannel.House.SensorEntries/Dockerfile
+      args:
+        USER: "${USER}"
+    networks:
+      housenet:
+        aliases:
+          - "sensorentries.house.dev.local"
+    ports:
+      - "82:80"
+    depends_on:
+      - users
+      - devices
+
+
+networks:
+  housenet:

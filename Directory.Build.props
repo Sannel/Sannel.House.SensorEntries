@@ -1,0 +1,7 @@
+<Project>
+	<PropertyGroup>
+		<Major>$([System.DateTime]::Now.ToString(`yyMM`))</Major>
+		<Minor>$([System.DateTime]::Now.ToString(`dd`))</Minor>
+		<Patch>0</Patch>
+	</PropertyGroup>
+</Project>

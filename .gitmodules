@@ -1,0 +1,3 @@
+[submodule "Sannel.House.BuildHelpers"]
+	path = Sannel.House.BuildHelpers
+	url = https://github.com/Sannel/Sannel.House.BuildHelpers.git
