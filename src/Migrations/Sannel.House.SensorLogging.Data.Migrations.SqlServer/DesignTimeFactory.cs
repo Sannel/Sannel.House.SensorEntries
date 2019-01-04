@@ -1,0 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer
+{
+	public class DesignTimeFactory : IDesignTimeDbContextFactory<SensorLoggingContext>
+	{
+		public SensorLoggingContext CreateDbContext(string[] args)
+		{
+			var builder = new DbContextOptionsBuilder<SensorLoggingContext>();
+
+
+			builder.UseSqlServer("data source=db.db", o => o.MigrationsAssembly(GetType().Assembly.GetName().FullName));
+
+			return new SensorLoggingContext(builder.Options);
+
+		}
+	}
+}

@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Sannel.House.Models" Version="1901.1.0-beta" />
+    <PackageReference Include="Sannel.House.Sensor" Version="1901.1.0-beta" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+  </ItemGroup>
+
 </Project>
