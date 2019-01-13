@@ -1,17 +1,17 @@
-image: sannel/sannelhousedevices:beta-v1
+image: sannel/sannelhousesensorlogging:beta-v1
 manifests:
   -
-    image: sannel/sannelhousedevices:1812.09-beta-win
+    image: sannel/sannelhousesensorlogging:1812.09-beta-win
     platform:
       architecture: amd64
       os: windows
   -
-    image: sannel/sannelhousedevices:1812.09-beta-linux-x86
+    image: sannel/sannelhousesensorlogging:1812.09-beta-linux-x86
     platform:
       architecture: amd64
       os: linux
   -
-    image: sannel/sannelhousedevices:1812.09-beta-linux-arm
+    image: sannel/sannelhousesensorlogging:1812.09-beta-linux-arm
     platform:
       architecture: arm
       os: linux

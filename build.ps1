@@ -1,13 +1,15 @@
 #!/usr/local/bin/pwsh
 param(
-	[switch]$DevicesOnly
+	[switch]$SensorLogging
 )
 
 $target = "";
-if($DevicesOnly)
+if($SensorLogging)
 {
-	$target = "devices"
+	$target = "sensorlogging"
 }
+
+Remove-Item -ErrorAction SilentlyContinue src/Sannel.House.SensorLogging/app_data/data.db
 
 if($IsLinux -eq $true -or $IsMacOS -eq $true)
 {

@@ -1,6 +1,23 @@
 #!/usr/local/bin/pwsh
 param(
+	[switch]$SensorLogging,
+	[switch]$Devices,
+	[Switch]$Users
 )
+
+$target = "";
+if($SensorLogging)
+{
+	$target = "sensorlogging"
+}
+elseif($Devices)
+{
+	$target = "devices"
+}
+elseif($Users)
+{
+	$target = "users"
+}
 
 if($IsLinux -eq $true -or $IsMacOS -eq $true)
 {
@@ -17,12 +34,12 @@ if($IsLinux -eq $true -or $IsMacOS -eq $true)
 	$env:USER="root"
 	$env:SANNEL_ARCH="linux-$uname"
 	$env:SANNEL_VERSION=Get-Date -format yyMM.dd
-	docker-compose -f docker-compose.yml -f docker-compose.unix.yml up
+	docker-compose -f docker-compose.yml -f docker-compose.unix.yml up $target
 }
 else
 {
 	$env:USER="administrator"
 	$env:SANNEL_ARCH="win"
 	$env:SANNEL_VERSION=Get-Date -format yyMM.dd
-	docker-compose -f docker-compose.yml -f docker-compose.windows.yml up
+	docker-compose -f docker-compose.yml -f docker-compose.windows.yml up $target
 }
