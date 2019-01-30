@@ -1,4 +1,4 @@
-using xunit;
+using XUnit;
 
 namespace Sannel.House.SensorLogging.Tests
 {
