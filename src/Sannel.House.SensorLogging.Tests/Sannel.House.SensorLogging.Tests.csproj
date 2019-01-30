@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+		<PackageReference Include="altcover" Version="5.0.664" />
+		<PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
