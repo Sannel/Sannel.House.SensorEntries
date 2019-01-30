@@ -1,7 +1,12 @@
 <Project>
 	<PropertyGroup>
-		<Major>$([System.DateTime]::Now.ToString(`yyMM`))</Major>
-		<Minor>$([System.DateTime]::Now.ToString(`dd`))</Minor>
-		<Patch>0</Patch>
+		<Major Condition="'$(Build_BuildNumber)' != ''">$(Build_BuildNumber.Split('.')[0])</Major>
+		<Minor Condition="'$(Build_BuildNumber)' != ''">$(Build_BuildNumber.Split('.')[1])</Minor>
+		<Patch Condition="'$(Build_BuildNumber)' != ''">$(Build_BuildNumber.Split('.')[2])</Patch>
+		<BuildNumber Condition="'$(Build_BuildNumber)' != ''">$(Build_BuildNumber.Split('.')[3])</BuildNumber>
+		<Major Condition="'$(Major)' == ''">$([System.DateTime]::Now.ToString(`yyMM`))</Major>
+		<Minor Condition="'$(Minor)' == ''">$([System.DateTime]::Now.ToString(`dd`))</Minor>
+		<Patch Condition="'$(Patch)' == ''">0</Patch>
+		<BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
 	</PropertyGroup>
 </Project>

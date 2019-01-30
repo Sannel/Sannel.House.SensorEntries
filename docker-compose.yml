@@ -21,18 +21,8 @@ services:
     depends_on:
       - users
 
-  tests:
-    image: ${DOCKER_REGISTRY}sannelhousesensorentries:tests-${SANNEL_ARCH}
-    ports:
-      - "8080:80"
-    build:
-      context: .
-      dockerfile: src/Sannel.House.SensorLogging.Tests/Dockerfile
-    networks:
-      - housenet
-
   sensorlogging:
-    image: ${DOCKER_REGISTRY}sannelhousesensorentries:${SANNEL_VERSION}-beta-${SANNEL_ARCH}
+    image: ${DOCKER_REGISTRY}sannelhousesensorentries:${BuildType}-${SANNEL_VERSION}-${SANNEL_ARCH}
     build:
       context: .
       dockerfile: src/Sannel.House.SensorLogging/Dockerfile

@@ -13,25 +13,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1B3AE4C4-80B2-408B-A13A-1AD3D9210BC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging", "src\Sannel.House.SensorLogging\Sannel.House.SensorLogging.csproj", "{87411868-7BF2-4CFA-8371-C83A672922E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging", "src\Sannel.House.SensorLogging\Sannel.House.SensorLogging.csproj", "{87411868-7BF2-4CFA-8371-C83A672922E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Data", "src\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj", "{686C87CE-BA69-444B-B115-11940114974C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data", "src\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj", "{686C87CE-BA69-444B-B115-11940114974C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Interfaces", "src\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj", "{578C9E8A-BDC9-4D37-9A7D-C4742D63CEFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Interfaces", "src\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj", "{578C9E8A-BDC9-4D37-9A7D-C4742D63CEFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Models", "src\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj", "{C4D71AE8-51D1-44B1-8C31-67A985E591B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Models", "src\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj", "{C4D71AE8-51D1-44B1-8C31-67A985E591B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Repositories", "src\Sannel.House.SensorLogging.Repositories\Sannel.House.SensorLogging.Repositories.csproj", "{3285C12A-1F22-4785-BF97-A79931DBB14B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Repositories", "src\Sannel.House.SensorLogging.Repositories\Sannel.House.SensorLogging.Repositories.csproj", "{3285C12A-1F22-4785-BF97-A79931DBB14B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Data.Migrations.Sqlite", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.Sqlite\Sannel.House.SensorLogging.Data.Migrations.Sqlite.csproj", "{55664148-CAE6-4145-A9EA-B63950D1EC2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data.Migrations.Sqlite", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.Sqlite\Sannel.House.SensorLogging.Data.Migrations.Sqlite.csproj", "{55664148-CAE6-4145-A9EA-B63950D1EC2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Data.Migrations.SqlServer", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.SqlServer\Sannel.House.SensorLogging.Data.Migrations.SqlServer.csproj", "{C0E5234D-943B-493C-B80B-E1DF9C29AD21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data.Migrations.SqlServer", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.SqlServer\Sannel.House.SensorLogging.Data.Migrations.SqlServer.csproj", "{C0E5234D-943B-493C-B80B-E1DF9C29AD21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Data.Migrations.MySql", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.MySql\Sannel.House.SensorLogging.Data.Migrations.MySql.csproj", "{8B936EA5-86BB-4A8F-9ACB-DB6F14201092}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data.Migrations.MySql", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.MySql\Sannel.House.SensorLogging.Data.Migrations.MySql.csproj", "{8B936EA5-86BB-4A8F-9ACB-DB6F14201092}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Client", "src\Sannel.House.SensorLogging.Client\Sannel.House.SensorLogging.Client.csproj", "{74371D53-F6BB-4BDD-97D7-DCD2C7D81EE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Client", "src\Sannel.House.SensorLogging.Client\Sannel.House.SensorLogging.Client.csproj", "{74371D53-F6BB-4BDD-97D7-DCD2C7D81EE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.SensorLogging.Tests", "src\Sannel.House.SensorLogging.Tests\Sannel.House.SensorLogging.Tests.csproj", "{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Tests", "src\Sannel.House.SensorLogging.Tests\Sannel.House.SensorLogging.Tests.csproj", "{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data.Migrations.PostgreSQL", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.csproj", "{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +97,7 @@ Global
 		{55664148-CAE6-4145-A9EA-B63950D1EC2A} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{C0E5234D-943B-493C-B80B-E1DF9C29AD21} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{8B936EA5-86BB-4A8F-9ACB-DB6F14201092} = {EDB22547-363D-41E7-98A1-81D5949652D6}
+		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0F2B1DDD-90B0-45C5-AA21-98A481D51998}
