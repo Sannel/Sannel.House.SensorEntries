@@ -1,3 +1,6 @@
 [submodule "Sannel.House.BuildHelpers"]
 	path = Sannel.House.BuildHelpers
 	url = https://github.com/Sannel/Sannel.House.BuildHelpers.git
+[submodule "scripts"]
+	path = scripts
+	url = https://github.com/Sannel/Sannel.House.BuildScripts.git
