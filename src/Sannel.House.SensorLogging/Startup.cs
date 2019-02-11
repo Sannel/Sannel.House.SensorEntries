@@ -14,6 +14,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sannel.House.SensorLogging.Data.Migrations.MySql;
+using Sannel.House.SensorLogging.Data.Migrations.PostgreSQL;
+using Sannel.House.SensorLogging.Data.Migrations.Sqlite;
+using Sannel.House.SensorLogging.Data.Migrations.SqlServer;
+using Sannel.House.SensorLogging.Data;
+using Sannel.House.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System;
+using Microsoft.Extensions.Logging;
+using Sannel.House.Web;
 
 namespace Sannel.House.SensorLogging
 {
@@ -29,6 +40,28 @@ namespace Sannel.House.SensorLogging
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			services.AddDbContextPool<SensorLoggingContext>(o =>
+			{
+				switch (Configuration["Db:Provider"])
+				{
+					case "mysql":
+						o.ConfigureMySql(Configuration["Db:ConnectionString"]);
+						break;
+					case "sqlserver":
+						o.ConfigureSqlServer(Configuration["Db:ConnectionString"]);
+						break;
+					case "PostgreSQL":
+					case "postgresql":
+						o.ConfigurePostgreSQL(Configuration["Db:ConnectionString"]);
+						break;
+					case "sqlite":
+					default:
+						o.ConfigureSqlite(Configuration["Db:ConnectionString"]);
+						break;
+				}
+			});
+
+
 			services.AddAuthentication("houseapi")
 			.AddIdentityServerAuthentication("houseapi", o =>
 			{
@@ -43,11 +76,38 @@ namespace Sannel.House.SensorLogging
 #endif
 			});
 
+			services.AddSwaggerDocument();
+
+			services.AddHealthChecks()
+				.AddDbHealthCheck<SensorLoggingContext>("DbHealthCheck", async (context) =>
+				{
+					await context.SensorEntries.Take(1).CountAsync();
+				});
+
+
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider provider, ILogger<Startup> logger)
 		{
+			provider.CheckAndInstallTrustedCertificate();
+
+			var p = Configuration["Db:Provider"];
+			var db = provider.GetService<SensorLoggingContext>();
+
+			if (string.Compare(p, "mysql", true) == 0
+					|| string.Compare(p, "postgresql", true) == 0
+					|| string.Compare(p, "sqlserver", true) == 0)
+			{
+				if (!db.WaitForServer(logger))
+				{
+					throw new Exception("Shutting down");
+				}
+			}
+
+			db.Database.Migrate();
+ 
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
@@ -58,7 +118,14 @@ namespace Sannel.House.SensorLogging
 				app.UseHsts();
 			}
 
+			app.UseHealthChecks("/health");
+
+			app.UseAuthentication();
 			app.UseHttpsRedirection();
+
+			app.UseSwagger();
+			app.UseSwaggerUi3();
+
 			app.UseMvc();
 		}
 	}

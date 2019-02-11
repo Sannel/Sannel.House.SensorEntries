@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   users:
-    image: ${DOCKER_REGISTRY}sannelhouseusers:beta
+    image: ${DOCKER_REGISTRY}house.users:beta
     networks: 
       housenet:
         aliases:
@@ -11,7 +11,7 @@ services:
       - "443:443"
 
   devices:
-    image: ${DOCKER_REGISTRY}sannelhousedevices:beta-v1
+    image: ${DOCKER_REGISTRY}house.devices:beta
     networks:
       housenet:
         aliases:
@@ -22,7 +22,7 @@ services:
       - users
 
   sensorlogging:
-    image: ${DOCKER_REGISTRY}sannelhousesensorentries:${BuildType}-${SANNEL_VERSION}-${SANNEL_ARCH}
+    image: ${DOCKER_REGISTRY}${ImageName}:${BuildType}-${SANNEL_VERSION}-${SANNEL_ARCH}
     build:
       context: .
       dockerfile: src/Sannel.House.SensorLogging/Dockerfile
