@@ -14,10 +14,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Sannel.House.SensorLogging.Data.Migrations.MySql;
-using Sannel.House.SensorLogging.Data.Migrations.PostgreSQL;
-using Sannel.House.SensorLogging.Data.Migrations.Sqlite;
-using Sannel.House.SensorLogging.Data.Migrations.SqlServer;
 using Sannel.House.SensorLogging.Data;
 using Sannel.House.Data;
 using System.Linq;
@@ -25,6 +21,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Web;
+using Sannel.House.Devices.Client;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace Sannel.House.SensorLogging
 {
@@ -74,6 +73,14 @@ namespace Sannel.House.SensorLogging
 					o.RequireHttpsMetadata = false;
 				}
 #endif
+			});
+
+			services.AddDevicesHttpClientRegistration(new Uri(Configuration["Client:DevicesBaseUrl"]));
+
+			services.AddTransient((p) =>
+			{
+				var d = new DevicesClient(p.GetService<IHttpClientFactory>());
+				return d;
 			});
 
 			services.AddSwaggerDocument();
