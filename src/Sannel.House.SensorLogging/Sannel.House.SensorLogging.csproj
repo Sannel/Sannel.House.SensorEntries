@@ -19,10 +19,10 @@
     <PackageReference Include="NSwag.AspNetCore" Version="12.0.14" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
     <PackageReference Include="Sannel.House.Data" Version="201902.111.103-beta" />
-    <PackageReference Include="Sannel.House.Devices.Client" Version="201902.110.102-beta" />
+    <PackageReference Include="Sannel.House.Devices.Client" Version="201902.116.103-beta" />
     <PackageReference Include="Sannel.House.Models" Version="201901.129.106-beta" />
     <PackageReference Include="Sannel.House.Sensor" Version="201901.129.106-beta" />
-    <PackageReference Include="Sannel.House.Web" Version="201901.129.106-beta" />
+    <PackageReference Include="Sannel.House.Web" Version="201902.117.101-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 

@@ -12,12 +12,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Devices.Client;
+using Sannel.House.Models;
 using Sannel.House.SensorLogging.Interfaces;
 using Sannel.House.SensorLogging.Models;
 using Sannel.House.SensorLogging.ViewModel;
+using Sannel.House.Web;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Sannel.House.SensorLogging.Controllers
@@ -40,7 +43,7 @@ namespace Sannel.House.SensorLogging.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = "SensorReadingWrite,Admin")]
-		public async Task<IActionResult> Post(SensorReading reading)
+		public async Task<ActionResult<ResponseModel<Guid>>> Post(SensorReading reading)
 		{
 			if(reading == null)
 			{
@@ -48,13 +51,20 @@ namespace Sannel.House.SensorLogging.Controllers
 				throw new ArgumentNullException(nameof(reading));
 			}
 
-			requestStart();
+			if(!ModelState.IsValid)
+			{
+				logger.LogInformation("Post: Invalid Model");
+				return BadRequest(new ErrorResponseModel(HttpStatusCode.BadRequest, "Invalid Model").FillWithStateDictionary(ModelState));
+			}
+
+			client.AuthToken = this.GetAuthToken();
 
 			var entry = new SensorEntry
 			{
 				SensorEntryId = Guid.NewGuid()
 			};
 
+			// Device Id Provided
 			if (reading.DeviceId.HasValue)
 			{
 				var resp = await client.GetDeviceAsync(reading.DeviceId.Value);
@@ -68,6 +78,7 @@ namespace Sannel.House.SensorLogging.Controllers
 					entry.DeviceId = Sannel.House.Data.Defaults.DEFAULT_DEVICEID;
 				}
 			}
+			// Device Mac Address Provided
 			else if(reading.DeviceMacAddress.HasValue)
 			{
 				var resp = await client.GetByMacAddressAsync(reading.DeviceMacAddress.Value);
@@ -81,6 +92,7 @@ namespace Sannel.House.SensorLogging.Controllers
 					entry.DeviceId = Sannel.House.Data.Defaults.DEFAULT_DEVICEID;
 				}
 			}
+			// Device Uuid Provided
 			else if(reading.DeviceUuid.HasValue)
 			{
 				var resp = await client.GetByUuidAsync(reading.DeviceUuid.Value);
@@ -94,6 +106,7 @@ namespace Sannel.House.SensorLogging.Controllers
 					entry.DeviceId = Sannel.House.Data.Defaults.DEFAULT_DEVICEID;
 				}
 			}
+			// Device Manufacture and ManufactureId Provided
 			else if(!string.IsNullOrWhiteSpace(reading.Manufacture) && !string.IsNullOrWhiteSpace(reading.ManufactureId))
 			{
 				var resp = await client.GetByManufactureIdAsync(reading.Manufacture, reading.ManufactureId);
@@ -107,37 +120,20 @@ namespace Sannel.House.SensorLogging.Controllers
 					entry.DeviceId = Sannel.House.Data.Defaults.DEFAULT_DEVICEID;
 				}
 			}
+			// No Id provided default to default id
 			else
 			{
 				logger.LogWarning("No valid device info passed defaulting to default device");
 				entry.DeviceId = Sannel.House.Data.Defaults.DEFAULT_DEVICEID;
 			}
+
 			entry.CreationDate = reading.CreationDate;
 			entry.SensorType = reading.SensorType;
 			entry.Values = reading.Values;
 
-			requestEnd();
-			return Ok();
-		}
+			await repository.AddSensorEntryAsync(entry);
 
-		private void requestStart()
-		{
-			client.GetAuthenticationToken += this.Client_GetAuthenticationToken;
-		}
-
-		private void requestEnd()
-		{
-			client.GetAuthenticationToken -= this.Client_GetAuthenticationToken;
-		}
-
-		private void Client_GetAuthenticationToken(object sender, Client.AuthenticationTokenArgs e)
-		{
-			string auth = HttpContext.Request.Headers["Authorziation"];
-			var segments = auth.Split(' ');
-			if(segments?.Length == 2)
-			{
-				e.Token = segments[1];
-			}
+			return Ok(entry.SensorEntryId);
 		}
 	}
 }

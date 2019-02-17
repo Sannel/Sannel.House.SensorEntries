@@ -8,6 +8,7 @@
 
   <ItemGroup>
 		<PackageReference Include="altcover" Version="5.0.665" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.2" />
 		<PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
