@@ -1,0 +1,56 @@
+{
+	"ReRoutes":[
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "devices.house.dev.local",
+					"Port": 80
+				}
+			],
+			"DownstreamPathTemplate": "/api/devices",
+			"UpstreamPathTemplate": "/api/v1/devices",
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http"
+		},
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "devices.house.dev.local",
+					"Port": 80
+				}
+			],
+			"DownstreamPathTemplate": "/api/devices/{url}",
+			"UpstreamPathTemplate": "/api/v1/devices/{url}",
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http"
+		},
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "devices.house.dev.local",
+					"Port": 80
+				}
+			],
+			"DownstreamPathTemplate": "/api/AlternateId",
+			"UpstreamPathTemplate": "/api/v1/AlternateId",
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http"
+		},
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "devices.house.dev.local",
+					"Port": 80
+				}
+			],
+			"DownstreamPathTemplate": "/api/AlternateId/{url}",
+			"UpstreamPathTemplate": "/api/v1/AlternateId/{url}",
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http"
+		}
+	]
+}

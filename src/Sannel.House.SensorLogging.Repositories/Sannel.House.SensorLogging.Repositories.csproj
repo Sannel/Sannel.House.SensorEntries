@@ -8,4 +8,9 @@
     <PackageReference Include="Sannel.House.Models" Version="201901.129.106-beta" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

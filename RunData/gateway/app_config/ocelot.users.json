@@ -1,0 +1,30 @@
+{
+	"ReRoutes": [
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "house.dev.local",
+					"Port": 80
+				}
+			],
+			"DownstreamPathTemplate": "/.well-known/{url}",
+			"UpstreamPathTemplate": "/.well-known/{url}",
+			"UpstreamHttpMethod": [ "Get" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http"
+		},
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "house.dev.local",
+					"Port": 80
+				}
+			],
+			"DownstreamPathTemplate": "/connect/{url}",
+			"UpstreamPathTemplate": "/connect/{url}",
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http"
+		}
+	]
+}

@@ -9,6 +9,7 @@ EXPOSE 443
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY [".nuget/nuget.config", ".nuget/nuget.config"]
+COPY ["Directory.Build.props", "./"]
 COPY ["src/Sannel.House.SensorLogging/Sannel.House.SensorLogging.csproj", "src/Sannel.House.SensorLogging/"]
 COPY ["src/Sannel.House.SensorLogging.Interfaces/Sannel.House.SensorLogging.Interfaces.csproj", "src/Sannel.House.SensorLogging.Interfaces/"]
 COPY ["src/Sannel.House.SensorLogging.Models/Sannel.House.SensorLogging.Models.csproj", "src/Sannel.House.SensorLogging.Models/"]

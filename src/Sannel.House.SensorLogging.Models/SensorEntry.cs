@@ -8,6 +8,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+using Newtonsoft.Json;
 using Sannel.House.Sensor;
 using System;
 using System.Collections.Generic;
@@ -31,5 +32,13 @@ namespace Sannel.House.SensorLogging.Models
 		public DateTime CreationDate { get; set; }
 
 		public Dictionary<string, double> Values { get; set; }
+
+		public override string ToString() 
+			=> $@"SensorEntryId={SensorEntryId}
+DeviceId={DeviceId}
+SensorType={SensorType}
+CreationDate={CreationDate}
+Values={JsonConvert.SerializeObject(Values ?? new object())}
+";
 	}
 }

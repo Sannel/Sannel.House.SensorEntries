@@ -1,14 +1,29 @@
 version: '3.6'
 
 services:
+  gateway:
+    image: ${DOCKER_REGISTRY}house.gateway:beta
+    networks:
+      housenet:
+        aliases:
+          - "gateway.house.dev.local"
+    ports:
+      - "80:80"
+      - "443:443"
+    user: "${USER}"
+    depends_on:
+      - users
+      - devices
+
   users:
     image: ${DOCKER_REGISTRY}house.users:beta
     networks: 
       housenet:
         aliases:
-          - "users.house.dev.local"
+          - "house.dev.local"
+    user: "${USER}"
     ports:
-      - "443:443"
+      - "8082:80"
 
   devices:
     image: ${DOCKER_REGISTRY}house.devices:beta
@@ -16,8 +31,9 @@ services:
       housenet:
         aliases:
           - "devices.house.dev.local"
+    user: "${USER}"
     ports:
-      - "80444:443"
+      - "8080:80"
     depends_on:
       - users
 
@@ -32,11 +48,13 @@ services:
       housenet:
         aliases:
           - "sensorlogging.house.dev.local"
+    user: "${USER}"
     ports:
-      - "80443:443"
+      - "8084:80"
     depends_on:
       - users
       - devices
+      - gateway
 
 
 networks:

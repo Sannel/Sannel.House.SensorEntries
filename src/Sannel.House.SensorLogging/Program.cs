@@ -31,7 +31,8 @@ namespace Sannel.House.SensorLogging
 			WebHost.CreateDefaultBuilder(args)
 				.ConfigureAppConfiguration(c =>
 				{
-					c.AddJsonFile(Path.Combine("app_config", "appsettings.json"), false, true);
+					c.AddJsonFile(Path.Combine("app_config", "appsettings.json"), true, true);
+					c.AddYamlFile(Path.Combine("app_config", "appsettings.yml"), true, true);
 				})
 				.UseStartup<Startup>();
 	}

@@ -24,6 +24,8 @@ using Sannel.House.Web;
 using Sannel.House.Devices.Client;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
+using Sannel.House.SensorLogging.Interfaces;
+using Sannel.House.SensorLogging.Repositories;
 
 namespace Sannel.House.SensorLogging
 {
@@ -79,9 +81,11 @@ namespace Sannel.House.SensorLogging
 
 			services.AddTransient((p) =>
 			{
-				var d = new DevicesClient(p.GetService<IHttpClientFactory>());
+				var d = new DevicesClient(p.GetService<IHttpClientFactory>(), p.GetService<ILogger<DevicesClient>>());
 				return d;
 			});
+
+			services.AddTransient<ISensorRepository, DbContextRepository>();
 
 			services.AddSwaggerDocument();
 

@@ -6,7 +6,7 @@
     <ProjectGuid>1b3ae4c4-80b2-408b-a13a-1ad3d9210bc1</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://{ServiceIPAddress}{ServicePort}/api/values</DockerServiceUrl>
-    <DockerServiceName>sannel.house.devices</DockerServiceName>
+    <DockerServiceName>sensorlogging</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.windows.yml" />

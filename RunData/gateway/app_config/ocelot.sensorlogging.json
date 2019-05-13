@@ -1,0 +1,17 @@
+{
+	"ReRoutes": [
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "sensorlogging.house.dev.local",
+					"Port": 80
+				}
+			],
+			"DownstreamPathTemplate": "/api/sensorlogging",
+			"UpstreamPathTemplate": "/api/v1/sensorlogging",
+			"UpstreamHttpMethod": [ "Post" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http"
+		}
+	]
+}

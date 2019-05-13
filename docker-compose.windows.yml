@@ -1,6 +1,11 @@
 version: '3.6'
 
 services:
+  gateway:
+    volumes:
+      - "./RunData/gateway/app_config:c:/app/app_config"
+      - "./RunData/gateway/app_data:c:/app/app_data"
+
   users:
     volumes:
       - "./RunData/users/app_config:c:/app/app_config"
@@ -8,5 +13,10 @@ services:
 
   devices:
     volumes:
-      - "./src/Sannel.House.Devices/app_config:c:/app/app_config"
-      - "./src/Sannel.House.Devices/app_data:c:/app/app_data"
+      - "./RunData/devices/app_config:c:/app/app_config"
+      - "./RunData/devices/app_data:c:/app/app_data"
+
+  sensorlogging:
+    volumes:
+      - "./src/Sannel.House.SensorLogging/app_config:c:/app/app_config"
+      - "./src/Sannel.House.SensorLogging/app_data:c:/app/app_data"
