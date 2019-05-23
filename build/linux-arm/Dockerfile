@@ -11,4 +11,4 @@ RUN ln -s  /var/run/secrets/kubernetes.io/serviceaccount/ca.crt /etc/ssl/certs/k
     && chown -R house:house /app \
     && rm -f /usr/bin/qemu-arm-static
 USER house
-ENTRYPOINT ["dotnet", "Sannel.House.Devices.dll"]
+ENTRYPOINT ["dotnet", "Sannel.House.SensorLogging.dll"]

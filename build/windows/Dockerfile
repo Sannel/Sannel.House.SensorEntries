@@ -6,4 +6,4 @@ EXPOSE 8443
 
 COPY Sannel.House.SensorLogging/ .
 USER ContainerUser
-ENTRYPOINT ["dotnet", "Sannel.House.Devices.dll"]
+ENTRYPOINT ["dotnet", "Sannel.House.SensorLogging.dll"]

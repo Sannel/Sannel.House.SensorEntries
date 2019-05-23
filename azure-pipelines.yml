@@ -260,8 +260,6 @@ jobs:
 - job: linux_x64
   pool:
     vmImage: ubuntu-16.04
-  dependsOn: linux_arm
-  condition: succeeded('linux_arm')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'
@@ -352,15 +350,18 @@ jobs:
         defaultContext: false
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-x64'
-
-    - task: Docker@1
-      displayName: 'Push an image'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'Docker Hub'
-        command: 'Push an image'
-        imageName: '$(imageName)-linux-x64'
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+    - powershell: |
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar $(imageName)-linux-x64
+        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.x64.tar
+      displayName: 'export image'
+#    - task: Docker@1
+#      displayName: 'Push an image'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryEndpoint: 'Docker Hub'
+#        command: 'Push an image'
+#        imageName: '$(imageName)-linux-x64'
+#      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
 
     - powershell: |
         # Write your powershell commands here.
@@ -379,8 +380,6 @@ jobs:
 - job: windows_x64
   pool:
     vmImage: windows-2019
-  dependsOn: linux_x64
-  condition: succeeded('linux_x64')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'
@@ -479,16 +478,24 @@ jobs:
         defaultContext: false
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-win-x64-1803'
-    - task: Docker@0
-      displayName: 'Build an image x64 1709'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        dockerFile: '$(Build.StagingDirectory)/Dockerfile'
-        buildArguments: 'tag=2.2-nanoserver-1709'
-        defaultContext: false
-        context: '$(Build.StagingDirectory)'
-        imageName: '$(imageName)-win-x64-1709'
+    - powershell: |
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar $(imageName)-win-x64-1803
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar $(imageName)-win-x64-1809
+        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar.zip
+        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar.zip
+        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar 
+        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar 
+      displayName: 'export images'
+#    - task: Docker@0
+#      displayName: 'Build an image x64 1709'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryConnection: 'Docker Hub'
+#        dockerFile: '$(Build.StagingDirectory)/Dockerfile'
+#        buildArguments: 'tag=2.2-nanoserver-1709'
+#        defaultContext: false
+#        context: '$(Build.StagingDirectory)'
+#        imageName: '$(imageName)-win-x64-1709'
 #    - task: Docker@1
 #      displayName: 'Push an image 1903'
 #      inputs:
@@ -497,30 +504,30 @@ jobs:
 #        command: 'Push an image'
 #        imageName: '$(imageName)-win-x64-1903'
 #      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
-    - task: Docker@1
-      displayName: 'Push an image 1809'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'Docker Hub'
-        command: 'Push an image'
-        imageName: '$(imageName)-win-x64-1809'
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
-    - task: Docker@1
-      displayName: 'Push an image 1803'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'Docker Hub'
-        command: 'Push an image'
-        imageName: '$(imageName)-win-x64-1803'
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
-    - task: Docker@1
-      displayName: 'Push an image 1709'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'Docker Hub'
-        command: 'Push an image'
-        imageName: '$(imageName)-win-x64-1709'
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+#    - task: Docker@1
+#      displayName: 'Push an image 1809'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryEndpoint: 'Docker Hub'
+#        command: 'Push an image'
+#        imageName: '$(imageName)-win-x64-1809'
+#      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+#    - task: Docker@1
+#      displayName: 'Push an image 1803'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryEndpoint: 'Docker Hub'
+#        command: 'Push an image'
+#        imageName: '$(imageName)-win-x64-1803'
+#      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+#    - task: Docker@1
+#      displayName: 'Push an image 1709'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryEndpoint: 'Docker Hub'
+#        command: 'Push an image'
+#        imageName: '$(imageName)-win-x64-1709'
+#      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
     - powershell: |
         # Write your powershell commands here.
         
@@ -537,8 +544,6 @@ jobs:
 - job: windows_arm
   pool:
     vmImage: windows-2019
-  dependsOn: windows_x64
-  condition: succeeded('windows_x64')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'
@@ -604,14 +609,22 @@ jobs:
 #        dockerRegistryConnection: 'Docker Hub'
 #        action: 'Run a Docker command'
 #        customCommand: 'build --build-arg tag=2.2-nanoserver-1903-arm32v7 -t $(imageName)-win-arm-1903 --isolation hyperv $(Build.StagingDirectory)'
-    - task: Docker@1
-      displayName: 'Push an image 1809'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'Docker Hub'
-        command: 'Push an image'
-        imageName: '$(imageName)-win-arm-1809'
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+    - powershell: |
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar $(imageName)-win-arm-1809
+        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar.zip
+        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar 
+#        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar $(imageName)-win-arm-1903
+#        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar.zip
+#        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar 
+      displayName: 'export images'
+#    - task: Docker@1
+#      displayName: 'Push an image 1809'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryEndpoint: 'Docker Hub'
+#        command: 'Push an image'
+#        imageName: '$(imageName)-win-arm-1809'
+#      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
 #    - task: Docker@1
 #      displayName: 'Push an image 1903'
 #      inputs:

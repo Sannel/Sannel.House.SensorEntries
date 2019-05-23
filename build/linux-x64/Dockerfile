@@ -9,4 +9,4 @@ RUN ln -s  /var/run/secrets/kubernetes.io/serviceaccount/ca.crt /etc/ssl/certs/k
     && useradd -m house -g house -u 1100 \
     && chown -R house:house /app
 USER house
-ENTRYPOINT ["dotnet", "Sannel.House.Devices.dll"]
+ENTRYPOINT ["dotnet", "Sannel.House.SensorLogging.dll"]
