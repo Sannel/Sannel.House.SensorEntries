@@ -152,8 +152,6 @@ jobs:
 - job: linux_arm
   pool:
     vmImage: ubuntu-16.04
-  dependsOn: client
-  condition: succeeded('client')
   steps:
     - powershell: |
         # Write your commands here
