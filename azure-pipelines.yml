@@ -233,7 +233,7 @@ jobs:
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-arm32v7'
     - powershell: |
-        docker save $(imageName)-linux-arm32v7 | bzip2 -9 > $(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.arm32v7.tar.bz2
+        docker save $(imageName)-linux-arm32v7 | bzip2 -9 > $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.arm32v7.tar.bz2
 #    - task: Docker@1
 #      displayName: 'Push an image'
 #      inputs:
