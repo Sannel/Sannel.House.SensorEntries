@@ -4,7 +4,10 @@ trigger:
 
 variables:
   sdk_version: 2.2.204
-  imageName: sannel/House.SensorLogging:$(Build.SourceBranchName)-$(Build.BuildId)
+  dockerRepositoryRoot: sannel
+  dockerRepositoryName: house.sensorlogging
+  dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
+  imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName):$(dockerTagBase)
 
 name: $(date:yyyy.MM.dd)$(rev:.rr)
 
@@ -229,14 +232,15 @@ jobs:
         defaultContext: false
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-arm32v7'
-    - task: Docker@1
-      displayName: 'Push an image'
-      inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryEndpoint: 'Docker Hub'
-        command: 'Push an image'
-        imageName: '$(imageName)-linux-arm32v7'
-      condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/develop')))
+    - powershell: |
+        docker save | bzip2 -9 > $(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).linux.arm32v7.tar.bz2
+#    - task: Docker@1
+#      displayName: 'Push an image'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryEndpoint: 'Docker Hub'
+#        command: 'Push an image'
+#        imageName: '$(imageName)-linux-arm32v7'
     - powershell: |
         # Write your powershell commands here.
         
