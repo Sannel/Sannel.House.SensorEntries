@@ -483,8 +483,8 @@ jobs:
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar $(imageName)-win-x64-1809
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar.zip
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar.zip
-        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar 
-        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar 
+        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1803.tar 
+        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.x64.1809.tar 
       displayName: 'export images'
 #    - task: Docker@0
 #      displayName: 'Build an image x64 1709'
@@ -612,10 +612,10 @@ jobs:
     - powershell: |
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar $(imageName)-win-arm-1809
         Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar.zip
-        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar 
+        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1809.tar 
 #        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar $(imageName)-win-arm-1903
 #        Compress-Archive $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar -DestinationPath $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar.zip
-#        Remove-Item -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar 
+#        Remove-Item $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).$(dockerTagBase).win.arm.1903.tar 
       displayName: 'export images'
 #    - task: Docker@1
 #      displayName: 'Push an image 1809'
