@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -11,19 +11,19 @@
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.4.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.9" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="1.6.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="NSwag.AspNetCore" Version="12.0.14" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NSwag.AspNetCore" Version="12.3.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
-    <PackageReference Include="Sannel.House.Data" Version="201902.111.103-beta" />
-    <PackageReference Include="Sannel.House.Devices.Client" Version="201902.118.103-beta" />
-    <PackageReference Include="Sannel.House.Models" Version="201901.129.106-beta" />
-    <PackageReference Include="Sannel.House.Sensor" Version="201901.129.106-beta" />
-    <PackageReference Include="Sannel.House.Web" Version="201902.117.101-beta" />
+    <PackageReference Include="Sannel.House.Data" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Devices.Client" Version="0.5.150-beta" />
+    <PackageReference Include="Sannel.House.Models" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Sensor" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Web" Version="0.5.139-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 

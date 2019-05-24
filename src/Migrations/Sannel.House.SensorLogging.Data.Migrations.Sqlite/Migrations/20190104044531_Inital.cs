@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
@@ -14,7 +14,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
                     SensorEntryId = table.Column<Guid>(nullable: false),
                     DeviceId = table.Column<int>(nullable: false),
                     SensorType = table.Column<int>(nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(nullable: false),
                     Values = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

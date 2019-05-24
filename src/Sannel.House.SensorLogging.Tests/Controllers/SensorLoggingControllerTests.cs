@@ -40,12 +40,13 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 			var repo = new Mock<ISensorRepository>();
 			var factory = new Mock<IHttpClientFactory>();
 			var messageHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+			var logger = new Mock<Microsoft.Extensions.Logging.ILogger<DevicesClient>>();
 
 
 			factory.Setup(i => i.CreateClient(nameof(Sannel.House.Devices.Client.DevicesClient)))
 				.Returns(() => new HttpClient(messageHandler.Object));
 
-			var client = new Mock<DevicesClient>(factory.Object);
+			var client = new Mock<DevicesClient>(factory.Object, logger.Object);
 
 			return (repo, factory, client);
 

@@ -8,11 +8,7 @@ Client:
 Authentication:
   AuthorityUrl: "http://house.dev.local"
   ApiName: houseapi
-  DisableRequireHttpsMetadata: false
-
-Cert:
-  Install: true
-  Crt: "app_config/Sannel Software - Dev - CA.crt"
+  DisableRequireHttpsMetadata: true
 
 Logging:
   LogLevel:
@@ -23,9 +19,9 @@ Logging:
 Kestrel:
   Endpoints:
     HTTP:
-      Url: http://*:80
+      Url: http://*:8080
 #    HTTPS:
-#      Url: https://*:443
+#      Url: https://*:8443
 #      Certificate:
 #        Path: app_config/house.dev.local.pfx
 #        Password: "@Password1"
