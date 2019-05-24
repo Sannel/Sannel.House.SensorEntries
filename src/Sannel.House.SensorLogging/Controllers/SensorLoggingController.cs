@@ -42,7 +42,7 @@ namespace Sannel.House.SensorLogging.Controllers
 		
 
 		[HttpPost]
-		[Authorize(Roles = "SensorReadingWrite,Admin")]
+		[Authorize(Roles = "SensorStoreWrite,Admin")]
 		public async Task<ActionResult<ResponseModel<Guid>>> Post(SensorReading reading)
 		{
 			if(reading == null)
