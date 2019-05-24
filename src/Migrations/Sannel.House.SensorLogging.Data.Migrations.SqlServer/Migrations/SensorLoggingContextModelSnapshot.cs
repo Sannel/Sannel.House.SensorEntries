@@ -15,7 +15,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -24,7 +24,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
                     b.Property<Guid>("SensorEntryId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTimeOffset>("CreationDate");
 
                     b.Property<int>("DeviceId");
 

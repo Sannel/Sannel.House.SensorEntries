@@ -29,7 +29,7 @@ namespace Sannel.House.SensorLogging.Models
 		[Required]
 		public SensorTypes SensorType { get; set; }
 
-		public DateTime CreationDate { get; set; }
+		public DateTimeOffset CreationDate { get; set; }
 
 		public Dictionary<string, double> Values { get; set; }
 

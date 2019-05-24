@@ -16,7 +16,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorEntry", b =>
@@ -24,7 +24,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
                     b.Property<Guid>("SensorEntryId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTimeOffset>("CreationDate");
 
                     b.Property<int>("DeviceId");
 
