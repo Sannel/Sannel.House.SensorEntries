@@ -70,7 +70,7 @@ namespace Sannel.House.SensorLogging.ViewModel
 		/// The creation date.
 		/// </value>
 		[Required]
-		public DateTime CreationDate { get; set; }
+		public DateTimeOffset CreationDate { get; set; }
 		/// <summary>
 		/// Gets or sets the values.
 		/// </summary>

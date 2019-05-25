@@ -133,7 +133,7 @@ namespace Sannel.House.SensorLogging.Controllers
 
 			await repository.AddSensorEntryAsync(entry);
 
-			return Ok(entry.SensorEntryId);
+			return Ok(new ResponseModel<Guid>(HttpStatusCode.OK, "Added", entry.SensorEntryId));
 		}
 	}
 }
