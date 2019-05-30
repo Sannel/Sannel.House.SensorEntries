@@ -85,5 +85,50 @@ namespace Sannel.House.SensorLogging.Client
 
 			return PostAsync<Results<Guid>>("SensorLogging", reading);
 		}
+
+		/// <summary>
+		/// Logs the reading asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <param name="sensor">The sensor.</param>
+		/// <param name="values">The values.</param>
+		/// <returns></returns>
+		public Task<Results<Guid>> LogReadingAsync(int deviceId, SensorTypes sensor, params (string key, double value)[] values)
+					=> LogReadingAsync(deviceId, sensor, DateTimeOffset.Now, values);
+
+		/// <summary>
+		/// Logs the reading asynchronous.
+		/// </summary>
+		/// <param name="deviceId">The device identifier.</param>
+		/// <param name="sensor">The sensor.</param>
+		/// <param name="createdDate">The created date.</param>
+		/// <param name="values">The values.</param>
+		/// <returns></returns>
+		public Task<Results<Guid>> LogReadingAsync(int deviceId, SensorTypes sensor, DateTimeOffset createdDate, params (string key, double value)[] values)
+		{
+			if (values == null)
+			{
+				throw new ArgumentNullException(nameof(values));
+			}
+			if (values.Length < 1)
+			{
+				throw new ArgumentOutOfRangeException(nameof(values), "You must pass in at least 1 value");
+			}
+
+			var reading = new SensorReading
+			{
+				DeviceId = deviceId,
+				SensorType = sensor,
+				CreationDate = createdDate,
+				Values = new Dictionary<string, double>()
+			};
+
+			foreach (var (key, value) in values)
+			{
+				reading.Values.Add(key, value);
+			}
+
+			return PostAsync<Results<Guid>>("SensorLogging", reading);
+		}
 	}
 }
