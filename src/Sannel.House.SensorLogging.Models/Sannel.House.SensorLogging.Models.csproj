@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sannel.House.Models" Version="0.5.139-beta" />
-    <PackageReference Include="Sannel.House.Sensor" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
+    <PackageReference Include="Sannel.House.Sensor" Version="0.5.184-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
   </ItemGroup>
 

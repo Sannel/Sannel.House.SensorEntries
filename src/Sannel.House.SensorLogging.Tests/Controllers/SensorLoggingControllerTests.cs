@@ -27,6 +27,7 @@ using Moq.Protected;
 using System.Threading;
 using Newtonsoft.Json;
 using Sannel.House.SensorLogging.Models;
+using Results_Device = Sannel.House.Client.Results<Sannel.House.Devices.Client.Device>;
 
 namespace Sannel.House.SensorLogging.Tests.Controllers
 {
@@ -109,7 +110,7 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 
 			var deviceId = sensorReading.DeviceId ?? 340;
 
-			Func<Client.Results<Device>> ret = () => new Client.Results<Device>()
+			Func<Results_Device> ret = () => new Results_Device()
 			{
 				Success = false,
 				Status = 200,
@@ -161,10 +162,11 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 			var result = await controller.Post(sensorReading);
 			var okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 			Assert.Equal(200, okor.StatusCode);
-			var id = Assert.IsAssignableFrom<Guid>(okor.Value);
-			Assert.NotEqual(Guid.Empty, id);
+			var responseModel = Assert.IsAssignableFrom<Sannel.House.Models.ResponseModel<Guid>>(okor.Value);
+			Assert.NotNull(responseModel);
+			Assert.NotEqual(Guid.Empty, responseModel.Data);
 
-			ret = () => new Client.Results<Device>()
+			ret = () => new Results_Device()
 			{
 				Success = true,
 				Status = 200,
@@ -201,9 +203,9 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 			result = await controller.Post(sensorReading);
 			okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
 			Assert.Equal(200, okor.StatusCode);
-			id = Assert.IsAssignableFrom<Guid>(okor.Value);
-			Assert.NotEqual(Guid.Empty, id);
-
+			responseModel = Assert.IsAssignableFrom<Sannel.House.Models.ResponseModel<Guid>>(okor.Value);
+			Assert.NotNull(responseModel);
+			Assert.NotEqual(Guid.Empty, responseModel.Data);
 		}
 
 	}

@@ -1,7 +1,46 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
+		<FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
+		<Version Condition="'$(Configuration)' != 'Release'">$(Major).$(Minor).$(Patch)-beta</Version>
+		<Version Condition="'$(Configuration)' == 'Release'">$(Major).$(Minor).$(Patch)</Version>
+		<Authors>Adam Holt</Authors>
+		<Company>Sannel Software, L.L.C.</Company>
+		<PackageProjectUrl>https://github.com/Sannel/Sannel.House.SensorLogging</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Sannel/Sannel.House.SensorLogging</RepositoryUrl>
+		<PackageReleaseNotes><![CDATA[
+	$(Build_SourceVersionMessage)
+	$(Build_SourceVersion)]]></PackageReleaseNotes>
+		<Description>The client library to connect and log data to the sensor logging service.</Description>
+
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>TRACE;CLIENT</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>TRACE;CLIENT</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\Sannel.House.SensorLogging\ViewModel\SensorReading.cs" Link="SensorReading.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
+		<PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
+		<PackageReference Include="Sannel.House.Sensor" Version="0.5.184-beta" />
+		<PackageReference Include="Sannel.House.Client.Common" Version="0.5.185-beta" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="..\..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
+	</ItemGroup>
 
 </Project>

@@ -69,12 +69,10 @@ namespace Sannel.House.SensorLogging
 				o.Authority = this.Configuration["Authentication:AuthorityUrl"];
 				o.ApiName = this.Configuration["Authentication:ApiName"];
 				o.SupportedTokens = SupportedTokens.Both;
-#if DEBUG
 				if (this.Configuration.GetValue<bool?>("Authentication:DisableRequireHttpsMetadata") == true)
 				{
 					o.RequireHttpsMetadata = false;
 				}
-#endif
 			});
 
 			services.AddDevicesHttpClientRegistration(new Uri(Configuration["Client:DevicesBaseUrl"]));

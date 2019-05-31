@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sannel.House.Models" Version="0.5.139-beta" />
+    <PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
   </ItemGroup>
 
   <ItemGroup>
