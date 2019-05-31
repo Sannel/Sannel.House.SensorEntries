@@ -22,10 +22,7 @@ namespace Sannel.House.SensorLogging.Client
 namespace Sannel.House.SensorLogging.ViewModel
 #endif
 {
-#if !CLIENT
-	public
-#endif
-	class SensorReading
+	public class SensorReading
 	{
 		/// <summary>
 		/// Gets or sets the device identifier.
