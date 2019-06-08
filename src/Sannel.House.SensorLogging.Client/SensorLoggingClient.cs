@@ -37,11 +37,21 @@ namespace Sannel.House.SensorLogging.Client
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="SensorLoggingClient"/> class.
+		/// </summary>
+		/// <param name="client">The client.</param>
+		/// <param name="logger">The logger.</param>
+		public SensorLoggingClient(HttpClient client, ILogger logger) : base(client, logger)
+		{
+
+		}
+
+		/// <summary>
 		/// Gets the client.
 		/// </summary>
 		/// <returns></returns>
 		protected override HttpClient GetClient()
-			=> factory.CreateClient(nameof(SensorLoggingClient));
+			=> client ?? factory.CreateClient(nameof(SensorLoggingClient));
 
 		/// <summary>
 		/// Checks the values.

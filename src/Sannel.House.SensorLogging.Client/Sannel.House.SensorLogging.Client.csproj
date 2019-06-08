@@ -34,7 +34,7 @@
 		<PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
 		<PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
 		<PackageReference Include="Sannel.House.Sensor" Version="0.5.184-beta" />
-		<PackageReference Include="Sannel.House.Client.Common" Version="0.5.185-beta" />
+		<PackageReference Include="Sannel.House.Client.Common" Version="0.5.215-beta" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Include="..\..\LICENSE">
