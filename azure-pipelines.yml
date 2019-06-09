@@ -11,6 +11,14 @@ variables:
   projectFolder: Sannel.House.SensorLogging
   mainProjectPath: src/$(projectFolder)/$(projectFolder).csproj
   mainConfigPath: src/$(projectFolder)/app_config
+  tagVersion: 2.2
+  tagCodeName: stretch
+  hasClient: true
+  hasTests: true
+  disableLinux: false
+  disableArm64: true
+  disableWindows: false
+  disableOSX: false
 
 name: $(date:yyyy.MM.dd)$(rev:.rr)
 
@@ -18,6 +26,7 @@ jobs:
 - job: 'osx'
   pool:
     vmImage: macOS-10.13
+  condition: ne(variables['disableOSX'], 'true')
   steps:
   - task: DotNetCoreInstaller@0
     displayName: 'Use .NET Core sdk 2.2'
@@ -69,6 +78,7 @@ jobs:
       feedsToUse: config
       nugetConfigPath: .nuget/nuget.config
       externalFeedCredentials: 'Sannel House MyGet'
+    condition: eq(variables['hasTests'], 'true')
   - task: DotNetCoreCLI@2
     displayName: 'dotnet test'
     inputs:
@@ -76,6 +86,7 @@ jobs:
       command: test
       arguments: '--collect "Code coverage"'
       publishTestResults: true
+    condition: eq(variables['hasTests'], 'true')
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
     inputs:
@@ -99,6 +110,7 @@ jobs:
 - job: client
   pool:
     vmImage: ubuntu-16.04
+  condition: eq(variables['hasClient'], 'true')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'
@@ -156,6 +168,7 @@ jobs:
 - job: linux_arm
   pool:
     vmImage: ubuntu-16.04
+  condition: ne(variables['disableLinux'], 'true')
   steps:
     - powershell: |
         # Write your commands here
@@ -229,7 +242,7 @@ jobs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
         dockerFile: '$(Build.StagingDirectory)/Dockerfile'
-        buildArguments: 'tag=2.2-stretch-slim-arm32v7'
+        buildArguments: 'tag=$(tagVersion)-$(tagCodeName)-slim-arm32v7'
         defaultContext: false
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-arm32v7'
@@ -259,9 +272,117 @@ jobs:
         artifactName: 'linux-arm'
         targetPath: '$(Build.StagingDirectory)'
 
+- job: linux_arm64
+  pool:
+    vmImage: ubuntu-16.04
+  condition: and(ne(variables['disableLinux'], 'true'), ne(variables['disableArm64'], 'true'))
+  steps:
+    - powershell: |
+        # Write your commands here
+        sudo apt-get update
+        sudo apt-get install -y qemu qemu-user-static qemu-user binfmt-support
+        Copy-Item -Verbose /usr/bin/qemu-aarch64-static $(Build.StagingDirectory)
+        # Use the environment variables input below to pass secret variables to this script
+      displayName: 'Install qemu'
+    - task: DotNetCoreInstaller@0
+      displayName: 'Use .NET Core sdk $(sdk_version)'
+      inputs:
+        version: $(sdk_version)
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: $(mainProjectPath)
+        custom: restore
+        arguments: '-r linux-arm64 --configfile .nuget/nuget.config'
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Release'
+      inputs:
+        projects: $(mainProjectPath)
+        arguments: '-r linux-arm64 -c Release'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Debug'
+      inputs:
+        projects: $(mainProjectPath)
+        arguments: '-r linux-arm64 -c Debug'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: $(mainProjectPath)
+        arguments: '-r linux-arm64 -o $(Build.StagingDirectory)'
+        zipAfterPublish: false
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
+      inputs:
+        SourceFolder: '$(mainConfigPath)'
+        Contents: |
+          **/*.json
+          **/*.yml
+          **/*.pfx
+          **/*.crt
+        TargetFolder: '$(Build.StagingDirectory)/$(projectFolder)/app_config/'
+    - powershell: |
+        New-Item -Type Directory -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/
+        New-Item -Type File -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/.hold
+        
+        copy-item -Force -Verbose build/linux-arm64/Dockerfile $(Build.StagingDirectory)/
+      displayName: 'Prepare Items'
+    - task: Docker@1
+      displayName: 'Run an image '
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryEndpoint: 'Docker Hub'
+        command: 'Run an image'
+        arguments: '--rm --privileged'
+        imageName: ' multiarch/qemu-user-static:register'
+        containerCommand: '--reset'
+    - task: Docker@0
+      displayName: 'Build an image arm'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        dockerFile: '$(Build.StagingDirectory)/Dockerfile'
+        buildArguments: 'tag=$(tagVersion)-$(tagCodeName)-slim-arm64v8'
+        defaultContext: false
+        context: '$(Build.StagingDirectory)'
+        imageName: '$(imageName)-linux-arm64v8'
+    - powershell: |
+        $img = "$(imageName)".ToLower()
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.arm64v8.tar "${img}-linux-arm64v8"
+        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.arm64v8.tar
+      displayName: 'export image'
+#    - task: Docker@1
+#      displayName: 'Push an image'
+#      inputs:
+#        containerregistrytype: 'Container Registry'
+#        dockerRegistryEndpoint: 'Docker Hub'
+#        command: 'Push an image'
+#        imageName: '$(imageName)-linux-arm32v7'
+    - powershell: |
+        # Write your powershell commands here.
+        
+        Remove-Item -Force $(Build.StagingDirectory)/Dockerfile*
+        Remove-Item -Force $(Build.StagingDirectory)/qemu*
+        
+        # Use the environment variables input below to pass secret variables to this script.
+      displayName: 'clean up copy'
+    - task: PublishPipelineArtifact@0
+      displayName: 'Publish Pipeline Artifact'
+      inputs:
+        artifactName: 'linux-arm64'
+        targetPath: '$(Build.StagingDirectory)'
+
 - job: linux_x64
   pool:
     vmImage: ubuntu-16.04
+  condition: ne(variables['disableLinux'], 'true')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'
@@ -317,6 +438,7 @@ jobs:
         feedsToUse: config
         nugetConfigPath: .nuget/nuget.config
         externalFeedCredentials: 'Sannel House MyGet'
+      condition: eq(variables['hasTests'], 'true')
     - task: DotNetCoreCLI@2
       displayName: 'dotnet test'
       inputs:
@@ -324,6 +446,7 @@ jobs:
         command: test
         arguments: '--collect "Code coverage"'
         publishTestResults: true
+      condition: eq(variables['hasTests'], 'true')
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
       inputs:
@@ -348,7 +471,7 @@ jobs:
         containerregistrytype: 'Container Registry'
         dockerRegistryConnection: 'Docker Hub'
         dockerFile: '$(Build.StagingDirectory)/Dockerfile'
-        buildArguments: 'tag=2.2'
+        buildArguments: 'tag=$(tagVersion)'
         defaultContext: false
         context: '$(Build.StagingDirectory)'
         imageName: '$(imageName)-linux-x64'
@@ -383,6 +506,7 @@ jobs:
 - job: windows_x64
   pool:
     vmImage: windows-2019
+  condition: ne(variables['disableWindows'], 'true')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'
@@ -434,6 +558,7 @@ jobs:
         feedsToUse: config
         nugetConfigPath: .nuget/nuget.config
         externalFeedCredentials: 'Sannel House MyGet'
+      condition: eq(variables['hasTests'], 'true')
     - task: DotNetCoreCLI@2
       displayName: 'dotnet test'
       inputs:
@@ -441,6 +566,7 @@ jobs:
         command: test
         arguments: '--collect "Code coverage"'
         publishTestResults: true
+      condition: eq(variables['hasTests'], 'true')
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
       inputs:
@@ -551,6 +677,7 @@ jobs:
 - job: windows_arm
   pool:
     vmImage: windows-2019
+  condition: ne(variables['disableWindows'], 'true')
   steps:
     - task: DotNetCoreInstaller@0
       displayName: 'Use .NET Core sdk $(sdk_version)'

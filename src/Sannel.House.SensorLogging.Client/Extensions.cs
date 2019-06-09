@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace Sannel.House.SensorLogging.Client
@@ -25,7 +27,10 @@ namespace Sannel.House.SensorLogging.Client
 		/// <param name="services">The services.</param>
 		/// <returns></returns>
 		public static IServiceCollection AddSensorLoggingClientRegistration(this IServiceCollection services) 
-			=> services.AddTransient<SensorLoggingClient>();
+			=> services.AddTransient(g => new SensorLoggingClient(
+				g.GetService<IHttpClientFactory>(),
+				g.GetService<ILogger<SensorLoggingClient>>()
+			));
 
 		/// <summary>
 		/// Adds the sensor logging client and Http Client Factory Registration.

@@ -31,7 +31,7 @@ namespace Sannel.House.SensorLogging.Client
 		/// <exception cref="ArgumentNullException">factory
 		/// or
 		/// logger</exception>
-		public SensorLoggingClient(IHttpClientFactory factory, ILogger<SensorLoggingClient> logger) : base(factory, logger)
+		public SensorLoggingClient(IHttpClientFactory factory, ILogger logger) : base(factory, logger)
 		{
 
 		}
