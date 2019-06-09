@@ -75,13 +75,7 @@ namespace Sannel.House.SensorLogging
 				}
 			});
 
-			services.AddDevicesHttpClientRegistration(new Uri(Configuration["Client:DevicesBaseUrl"]));
-
-			services.AddTransient((p) =>
-			{
-				var d = new DevicesClient(p.GetService<IHttpClientFactory>(), p.GetService<ILogger<DevicesClient>>());
-				return d;
-			});
+			services.AddDevicesClient(new Uri(Configuration["Client:DevicesBaseUrl"]));
 
 			services.AddTransient<ISensorRepository, DbContextRepository>();
 
