@@ -47,7 +47,7 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 			factory.Setup(i => i.CreateClient(nameof(Sannel.House.Devices.Client.DevicesClient)))
 				.Returns(() => new HttpClient(messageHandler.Object));
 
-			var client = new Mock<DevicesClient>(factory.Object, logger.Object);
+			var client = new Mock<DevicesClient>(factory.Object, new Uri("http://gateway.dev.local"), logger.Object);
 
 			return (repo, factory, client);
 

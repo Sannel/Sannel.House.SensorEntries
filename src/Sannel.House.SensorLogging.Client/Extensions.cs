@@ -15,9 +15,9 @@ namespace Sannel.House.SensorLogging.Client
 		/// <param name="provider">The provider.</param>
 		/// <param name="baseUrl">The base URL.</param>
 		/// <returns></returns>
-		public static IServiceCollection AddSensorLoggingHttpClientRegistration(this IServiceCollection provider, Uri baseUrl)
+		public static IServiceCollection AddSensorLoggingHttpClientRegistration(this IServiceCollection provider)
 		{
-			Sannel.House.Client.Helpers.RegisterClient(provider, baseUrl, "/api/v1/", nameof(SensorLoggingClient), "1.0");
+			Sannel.House.Client.Helpers.RegisterClient(provider, nameof(SensorLoggingClient), "1.0");
 			return provider;
 		}
 
@@ -26,9 +26,10 @@ namespace Sannel.House.SensorLogging.Client
 		/// </summary>
 		/// <param name="services">The services.</param>
 		/// <returns></returns>
-		public static IServiceCollection AddSensorLoggingClientRegistration(this IServiceCollection services) 
+		public static IServiceCollection AddSensorLoggingClientRegistration(this IServiceCollection services, Uri baseUrl) 
 			=> services.AddTransient(g => new SensorLoggingClient(
 				g.GetService<IHttpClientFactory>(),
+				baseUrl,
 				g.GetService<ILogger<SensorLoggingClient>>()
 			));
 
@@ -39,7 +40,7 @@ namespace Sannel.House.SensorLogging.Client
 		/// <param name="baseUrl">The base URL.</param>
 		/// <returns></returns>
 		public static IServiceCollection AddSensorLoggingClient(this IServiceCollection service, Uri baseUrl)
-			=> service.AddSensorLoggingHttpClientRegistration(baseUrl)
-				.AddSensorLoggingClientRegistration();
+			=> service.AddSensorLoggingHttpClientRegistration()
+				.AddSensorLoggingClientRegistration(baseUrl);
 	}
 }

@@ -27,21 +27,29 @@ namespace Sannel.House.SensorLogging.Client
 	{
 		/// <summary>Initializes a new instance of the <see cref="SensorLoggingClient"/> class.</summary>
 		/// <param name="factory">The factory.</param>
+		/// <param name="baseUrl">The base URL i.e. http://gateway or http://gateway:8080</param>
 		/// <param name="logger">The logger.</param>
 		/// <exception cref="ArgumentNullException">factory
 		/// or
 		/// logger</exception>
-		public SensorLoggingClient(IHttpClientFactory factory, ILogger logger) : base(factory, logger)
+		public SensorLoggingClient(IHttpClientFactory factory, Uri baseUrl, ILogger logger) 
+			: base(factory, 
+				$"{baseUrl.Scheme}://{baseUrl.Host}:{baseUrl.Port}/api/v1/",
+				logger)
 		{
 
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SensorLoggingClient"/> class.
+		/// Initializes a new instance of the <see cref="SensorLoggingClient" /> class.
 		/// </summary>
 		/// <param name="client">The client.</param>
+		/// <param name="baseUrl">The base URL i.e. http://gateway or http://gateway:8080</param>
 		/// <param name="logger">The logger.</param>
-		public SensorLoggingClient(HttpClient client, ILogger logger) : base(client, logger)
+		public SensorLoggingClient(HttpClient client, Uri baseUrl, ILogger logger) 
+			: base(client, 
+				$"{baseUrl.Scheme}://{baseUrl.Host}:{baseUrl.Port}/api/v1/",
+				logger)
 		{
 
 		}
