@@ -427,5 +427,30 @@ namespace Sannel.House.SensorLogging.Client
 			return PostAsync<Results<Guid>>("SensorLogging", reading);
 		}
 
+		public Task<Results<Guid>> LogReadingAsync(SensorReading reading)
+		{
+			if(reading == null)
+			{
+				throw new ArgumentNullException(nameof(reading));
+			}
+
+			if(reading.Values == null)
+			{
+				throw new NullReferenceException("You must provide values to be stored in the reading");
+			}
+
+			if(reading.Values.Count < 1)
+			{
+				throw new IndexOutOfRangeException("You must provide values to be stored in the reading");
+			}
+
+			if(reading.CreationDate == default)
+			{
+				reading.CreationDate = DateTimeOffset.Now;
+			}
+
+			return PostAsync<Results<Guid>>("SensorLogging", reading);
+		}
+
 	}
 }
