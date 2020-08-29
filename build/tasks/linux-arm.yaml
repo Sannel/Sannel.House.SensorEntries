@@ -1,0 +1,118 @@
+parameters:
+  pool:
+    vmImage: ubuntu-latest
+  qemuStatic: qemu-aarch64-static
+  arch: arm64
+  archLong: arm64v8
+  ridSuffix: arm64
+  project: ""
+  imageName: ""
+  dockerRepositoryName: ""
+
+jobs:
+- job: linux_${{parameters['arch']}}
+  pool: ${{parameters['pool']}}
+  variables:
+    arch: ${{parameters['arch']}}
+    archLong: ${{parameters['archLong']}}
+    project: ${{parameters['project']}}
+    imageName: ${{parameters['imageName']}}
+    dockerRepositoryName: ${{parameters['dockerRepositoryName']}}
+  condition: and(ne(variables['disableLinux'], 'true'), ne(variables['disable${{parameters['arch']}}'], 'true'))
+  steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk $(sdk_version)'
+      inputs:
+        packageType: 'sdk'
+        version: '$(sdk_version)'
+        includePreviewVersions: false
+    - powershell: |
+        # Write your commands here
+        sudo apt-get update
+        sudo apt-get install -y qemu qemu-user-static qemu-user binfmt-support
+        Copy-Item -Verbose /usr/bin/${{parameters['qemuStatic']}} $(Build.StagingDirectory)
+        # Use the environment variables input below to pass secret variables to this script
+      displayName: 'Install qemu'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: $(mainProjectPath)
+        custom: restore
+        arguments: "-r linux-${{parameters['ridSuffix']}} --configfile .nuget/nuget.config"
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Release'
+      inputs:
+        projects: $(mainProjectPath)
+        arguments: "-r linux-${{parameters['ridSuffix']}} -c Release"
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Debug'
+      inputs:
+        projects: $(mainProjectPath)
+        arguments: "-r linux-${{parameters['ridSuffix']}} -c Debug"
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: $(mainProjectPath)
+        arguments: "-r linux-${{parameters['ridSuffix']}} -o $(Build.StagingDirectory)"
+        zipAfterPublish: false
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
+      inputs:
+        SourceFolder: '$(mainConfigPath)'
+        Contents: |
+          **/*.json
+          **/*.yml
+          **/*.pfx
+          **/*.crt
+        TargetFolder: '$(Build.StagingDirectory)/$(projectFolder)/app_config/'
+    - powershell: |
+        New-Item -Type Directory -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/
+        New-Item -Type File -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/.hold
+        
+        copy-item -Force -Verbose build/linux-$(arch)/Dockerfile $(Build.StagingDirectory)/
+      displayName: 'Prepare Items'
+    - task: Docker@1
+      displayName: 'Run an image '
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryEndpoint: 'Docker Hub'
+        command: 'Run an image'
+        arguments: '--rm --privileged'
+        imageName: ' multiarch/qemu-user-static:register'
+        containerCommand: '--reset'
+    - task: Docker@0
+      displayName: 'Build an image $(arch)'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        dockerFile: '$(Build.StagingDirectory)/Dockerfile'
+        buildArguments: 'tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong) project=$(project)'
+        defaultContext: false
+        context: '$(Build.StagingDirectory)'
+        imageName: '$(imageName)-linux-$(archLong)'
+    - powershell: |
+        $img = "$(imageName)".ToLower()
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.$(archLong).tar "${img}-linux-$(archLong)"
+        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.$(archLong).tar
+      displayName: 'export image'
+    - powershell: |
+        # Write your powershell commands here.
+        
+        Remove-Item -Force $(Build.StagingDirectory)/Dockerfile*
+        Remove-Item -Force $(Build.StagingDirectory)/qemu*
+        
+        # Use the environment variables input below to pass secret variables to this script.
+      displayName: 'clean up copy'
+    - task: PublishPipelineArtifact@0
+      displayName: 'Publish Pipeline Artifact'
+      inputs:
+        artifactName: 'linux-$(arch)'
+        targetPath: '$(Build.StagingDirectory)'

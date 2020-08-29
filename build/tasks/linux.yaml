@@ -1,0 +1,123 @@
+
+parameters:
+  pool:
+    vmImage: ubuntu-latest
+  project: ""
+  imageName: ""
+  dockerRepositoryName: ""
+
+jobs:
+- job: linux_x64
+  pool: ${{parameters['pool']}}
+  variables:
+    project: ${{parameters['project']}}
+    imageName: ${{parameters['imageName']}}
+    dockerRepositoryName: ${{parameters['dockerRepositoryName']}}
+  condition: ne(variables['disableLinux'], 'true')
+  steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk $(sdk_version)'
+      inputs:
+        packageType: 'sdk'
+        version: '$(sdk_version)'
+        includePreviewVersions: false
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: $(mainProjectPath)
+        custom: restore
+        arguments: '-r linux-x64 --configfile .nuget/nuget.config'
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Release'
+      inputs:
+        projects: $(mainProjectPath)
+        arguments: '-r linux-x64 -c Release'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build Debug'
+      inputs:
+        projects: $(mainProjectPath)
+        arguments: '-r linux-x64 -c Debug'
+      condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet publish'
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: $(mainProjectPath)
+        arguments: '-r linux-x64 -o $(Build.StagingDirectory)'
+        zipAfterPublish: false
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: custom
+        projects: '**/*Tests.csproj'
+        custom: restore
+        arguments: '-r linux-x64 --configfile .nuget/nuget.config'
+        feedsToUse: config
+        nugetConfigPath: .nuget/nuget.config
+        externalFeedCredentials: 'Sannel House MyGet'
+      condition: eq(variables['hasTests'], 'true')
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        projects: '**/*Tests.csproj'
+        command: test
+        arguments: '--collect "Code coverage"'
+        publishTestResults: true
+      condition: eq(variables['hasTests'], 'true')
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
+      inputs:
+        SourceFolder: '$(mainConfigPath)'
+        Contents: |
+          **/*.json
+          **/*.yml
+          **/*.pfx
+          **/*.crt
+        TargetFolder: '$(Build.StagingDirectory)/$(projectFolder)/app_config/'
+
+    - powershell: |
+        New-Item -Type Directory -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/
+        New-Item -Type File -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/.hold
+        
+        copy-item -Force -Verbose build/linux-x64/Dockerfile $(Build.StagingDirectory)/
+      displayName: 'Prepare Items'
+
+    - task: Docker@0
+      displayName: 'Build an image x64'
+      inputs:
+        containerregistrytype: 'Container Registry'
+        dockerRegistryConnection: 'Docker Hub'
+        dockerFile: '$(Build.StagingDirectory)/Dockerfile'
+        buildArguments: 'tag=$(tagVersion) project=$(project)'
+        defaultContext: false
+        context: '$(Build.StagingDirectory)'
+        imageName: '$(imageName)-linux-x64'
+    - powershell: |
+        $img = "$(imageName)".ToLower()
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.x64.tar "${img}-linux-x64"
+        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.x64.tar
+      displayName: 'export image'
+
+    - powershell: |
+        # Write your powershell commands here.
+        
+        Remove-Item -Force $(Build.StagingDirectory)/Dockerfile*
+        
+        # Use the environment variables input below to pass secret variables to this script.
+      displayName: 'clean up'
+
+    - task: PublishPipelineArtifact@0
+      displayName: 'Publish Pipeline Artifact'
+      inputs:
+        artifactName: 'linux-x64'
+        targetPath: '$(Build.StagingDirectory)'
