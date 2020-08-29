@@ -9,8 +9,8 @@ variables:
   listenerDockerRepositoryName: house.sensorlogging.listener
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName)
-  imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   listenerImageName: $(dockerRepositoryName)/$(listenerDockerRepositoryName)
+  imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.SensorLogging
   listenerProjectFolder: Sannel.House.SensorLogging.Listener
   mainProjectPath: src/$(projectFolder)/$(projectFolder).csproj

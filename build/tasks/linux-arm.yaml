@@ -100,7 +100,9 @@ jobs:
         arguments: '--build-arg tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong) --build-arg project=$(project)'
     - powershell: |
         $img = "$(imageName):$(imageTag)".ToLower()
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.$(archLong).tar "${img}-linux-$(archLong)"
+        $targetFile = "$(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.$(archLong).tar"
+        Write-Host $targetFile
+        docker save -o $targetFile "${img}-linux-$(archLong)"
         bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.$(archLong).tar
       displayName: 'export image'
     - powershell: |
