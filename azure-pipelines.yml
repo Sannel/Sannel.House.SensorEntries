@@ -3,7 +3,7 @@ trigger:
 - develop
 
 variables:
-  sdk_version: 3.1.*
+  sdk_version: 3.1.x
   dockerRepositoryRoot: sannel
   dockerRepositoryName: house.sensorlogging
   listenerDockerRepositoryName: house.sensorlogging.listener

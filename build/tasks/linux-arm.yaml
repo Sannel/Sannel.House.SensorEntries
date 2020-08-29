@@ -16,9 +16,6 @@ jobs:
   variables:
     arch: ${{parameters['arch']}}
     archLong: ${{parameters['archLong']}}
-    project: ${{parameters['project']}}
-    imageName: ${{parameters['imageName']}}
-    dockerRepositoryName: ${{parameters['dockerRepositoryName']}}
   condition: and(ne(variables['disableLinux'], 'true'), ne(variables['disable${{parameters['arch']}}'], 'true'))
   steps:
     - task: UseDotNet@2
