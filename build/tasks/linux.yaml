@@ -10,6 +10,8 @@ parameters:
 jobs:
 - job: linux_x64_${{parameters['jobName']}}
   pool: ${{parameters['pool']}}
+  variables:
+    project: ${{parameters['project']}}
   condition: ne(variables['disableLinux'], 'true')
   steps:
     - task: UseDotNet@2

@@ -16,6 +16,7 @@ jobs:
   variables:
     arch: ${{parameters['arch']}}
     archLong: ${{parameters['archLong']}}
+    project: ${{parameters['project']}}
   condition: and(ne(variables['disableLinux'], 'true'), ne(variables['disable${{parameters['arch']}}'], 'true'))
   steps:
     - task: UseDotNet@2
