@@ -114,5 +114,5 @@ jobs:
     - task: PublishPipelineArtifact@0
       displayName: 'Publish Pipeline Artifact'
       inputs:
-        artifactName: 'linux-$(arch)'
+        artifactName: 'linux-$(arch)-$(project)'
         targetPath: '$(Build.StagingDirectory)'
