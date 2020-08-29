@@ -1,6 +1,7 @@
 parameters:
   pool:
     vmImage: ubuntu-latest
+  jobName: "main"
   qemuStatic: qemu-aarch64-static
   arch: arm64
   archLong: arm64v8
@@ -10,7 +11,7 @@ parameters:
   dockerRepositoryName: ""
 
 jobs:
-- job: linux_${{parameters['arch']}}_${{parameters['project']}}
+- job: linux_${{parameters['arch']}}_${{parameters['jobName']}}
   pool: ${{parameters['pool']}}
   variables:
     arch: ${{parameters['arch']}}

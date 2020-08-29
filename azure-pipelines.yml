@@ -30,6 +30,7 @@ jobs:
     project: $(projectFolder)
     imageName: $(imageName)
     dockerRepositoryName: $(dockerRepositoryName)
+    jobName: sensorlogging
 
 - template: build/tasks/linux-arm.yaml
   parameters:
@@ -40,6 +41,7 @@ jobs:
     project: $(listenerProjectFolder)
     imageName: $(dockerRepositoryRoot)/$(listenerDockerRepositoryName):$(dockerTagBase)
     dockerRepositoryName: $(listenerDockerRepositoryName)
+    jobName: sensorlistener
 
 - template: build/tasks/linux-arm.yaml
   parameters:
@@ -48,6 +50,7 @@ jobs:
     project: $(projectFolder)
     imageName: $(imageName)
     dockerRepositoryName: $(dockerRepositoryName)
+    jobName: sensorlogging
 
 - template: build/tasks/linux-arm.yaml
   parameters:
@@ -56,15 +59,18 @@ jobs:
     project: $(listenerProjectFolder)
     imageName: $(dockerRepositoryRoot)/$(listenerDockerRepositoryName):$(dockerTagBase)
     dockerRepositoryName: $(listenerDockerRepositoryName)
+    jobName: sensorlistener
 
 - template: build/tasks/linux.yaml
   parameters:
     project: $(projectFolder)
     imageName: $(imageName)
     dockerRepositoryName: $(dockerRepositoryName)
+    jobName: sensorlogging
 
 - template: build/tasks/linux.yaml
   parameters:
     project: $(listenerProjectFolder)
     imageName: $(dockerRepositoryRoot)/$(listenerDockerRepositoryName):$(dockerTagBase)
     dockerRepositoryName: $(listenerDockerRepositoryName)
+    jobName: sensorlistener

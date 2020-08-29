@@ -2,12 +2,13 @@
 parameters:
   pool:
     vmImage: ubuntu-latest
+  jobName: "main"
   project: ""
   imageName: ""
   dockerRepositoryName: ""
 
 jobs:
-- job: linux_x64_${{parameters['project']}}
+- job: linux_x64_${{parameters['jobName']}}
   pool: ${{parameters['pool']}}
   variables:
     project: ${{parameters['project']}}
