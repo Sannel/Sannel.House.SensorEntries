@@ -10,7 +10,7 @@ parameters:
   dockerRepositoryName: ""
 
 jobs:
-- job: linux_${{parameters['arch']}}
+- job: linux_${{parameters['arch']}}_${{parameters['project']}}
   pool: ${{parameters['pool']}}
   variables:
     arch: ${{parameters['arch']}}

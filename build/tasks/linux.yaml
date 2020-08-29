@@ -7,7 +7,7 @@ parameters:
   dockerRepositoryName: ""
 
 jobs:
-- job: linux_x64
+- job: linux_x64_${{parameters['project']}}
   pool: ${{parameters['pool']}}
   variables:
     project: ${{parameters['project']}}
