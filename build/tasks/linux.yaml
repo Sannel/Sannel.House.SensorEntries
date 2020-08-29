@@ -12,6 +12,8 @@ jobs:
   pool: ${{parameters['pool']}}
   variables:
     project: ${{parameters['project']}}
+    imageName: ${{parameters['imageName']}}
+    dockerRepositoryName: ${{parameters['dockerRepositoryName']}}
   condition: ne(variables['disableLinux'], 'true')
   steps:
     - task: UseDotNet@2
