@@ -5,11 +5,9 @@ trigger:
 variables:
   sdk_version: 3.1.x
   dockerRepositoryRoot: sannel
-  dockerRepositoryName: house.sensorlogging
-  listenerDockerRepositoryName: house.sensorlogging.listener
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
-  imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName)
-  listenerImageName: $(dockerRepositoryName)/$(listenerDockerRepositoryName)
+  loggerImageName: house.sensorlogging
+  listenerImageName: house.sensorlogging.listener
   imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.SensorLogging
   listenerProjectFolder: Sannel.House.SensorLogging.Listener
@@ -30,8 +28,7 @@ jobs:
     ridSuffix: arm
     qemuStatic: qemu-arm-static
     project: $(projectFolder)
-    imageName: $(imageName)
-    dockerRepositoryName: $(dockerRepositoryName)
+    imageName: $(loggerImageName)
     jobName: sensorlogging
 
 - template: build/tasks/linux-arm.yaml
@@ -50,7 +47,7 @@ jobs:
     arch: arm64
     archLong: arm64v8
     project: $(projectFolder)
-    imageName: $(imageName)
+    imageName: $(loggerImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: sensorlogging
 
@@ -66,7 +63,7 @@ jobs:
 - template: build/tasks/linux.yaml
   parameters:
     project: $(projectFolder)
-    imageName: $(imageName)
+    imageName: $(loggerImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: sensorlogging
 

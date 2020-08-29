@@ -8,7 +8,6 @@ parameters:
   ridSuffix: arm64
   project: ""
   imageName: ""
-  dockerRepositoryName: ""
 
 jobs:
 - job: linux_${{parameters['arch']}}_${{parameters['jobName']}}
@@ -18,7 +17,6 @@ jobs:
     archLong: ${{parameters['archLong']}}
     project: ${{parameters['project']}}
     imageName: ${{parameters['imageName']}}
-    dockerRepositoryName: ${{parameters['dockerRepositoryName']}}
   condition: and(ne(variables['disableLinux'], 'true'), ne(variables['disable${{parameters['arch']}}'], 'true'))
   steps:
     - task: UseDotNet@2
@@ -92,14 +90,14 @@ jobs:
     - task: Docker@2
       inputs:
         containerRegistry: 'Docker Hub'
-        repository: $(imageName)
+        repository: $(dockerRepositoryRoot)/$(imageName)
         command: 'build'
         Dockerfile: '$(Build.StagingDirectory)/Dockerfile'
         buildContext: '$(Build.StagingDirectory)'
         tags: '$(imageTag)-linux-$(archLong)'
         arguments: '--build-arg tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong) --build-arg project=$(project)'
     - powershell: |
-        $img = "$(imageName):$(imageTag)".ToLower()
+        $img = "$(dockerRepositoryRoot)/$(imageName):$(imageTag)".ToLower()
         $targetFile = "$(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.$(archLong).tar"
         Write-Host $targetFile
         docker save -o $targetFile "${img}-linux-$(archLong)"
