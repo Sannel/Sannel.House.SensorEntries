@@ -87,22 +87,19 @@ jobs:
         arguments: '--rm --privileged'
         imageName: ' multiarch/qemu-user-static:register'
         containerCommand: '--reset'
-    - task: Docker@0
-      displayName: 'Build an image $(arch)'
+    - task: Docker@2
       inputs:
-        containerregistrytype: 'Container Registry'
-        dockerRegistryConnection: 'Docker Hub'
-        dockerFile: '$(Build.StagingDirectory)/Dockerfile'
-        buildArguments: 
-        - 'tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong)'
-        - 'project=$(project)'
-        defaultContext: false
-        context: '$(Build.StagingDirectory)'
-        imageName: '$(imageName)-linux-$(archLong)'
+        containerRegistry: 'Docker Hub'
+        repository: $(imageName)
+        command: 'build'
+        Dockerfile: '$(Build.StagingDirectory)/Dockerfile'
+        buildContext: '$(Build.StagingDirectory)'
+        tags: '$(imageTag)-linux-$(archLong)'
+        arguments: '--build-arg tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong) --build-arg project=$(project)'
     - powershell: |
-        $img = "$(imageName)".ToLower()
-        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.$(archLong).tar "${img}-linux-$(archLong)"
-        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(dockerRepositoryName).linux.$(archLong).tar
+        $img = "$(imageName):$(imageTag)".ToLower()
+        docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.$(archLong).tar "${img}-linux-$(archLong)"
+        bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.$(archLong).tar
       displayName: 'export image'
     - powershell: |
         # Write your powershell commands here.

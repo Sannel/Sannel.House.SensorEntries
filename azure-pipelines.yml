@@ -8,7 +8,9 @@ variables:
   dockerRepositoryName: house.sensorlogging
   listenerDockerRepositoryName: house.sensorlogging.listener
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
-  imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName):$(dockerTagBase)
+  imageName: $(dockerRepositoryRoot)/$(dockerRepositoryName)
+  imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
+  listenerImageName: $(dockerRepositoryName)/$(listenerDockerRepositoryName)
   projectFolder: Sannel.House.SensorLogging
   listenerProjectFolder: Sannel.House.SensorLogging.Listener
   mainProjectPath: src/$(projectFolder)/$(projectFolder).csproj
@@ -39,7 +41,7 @@ jobs:
     ridSuffix: arm
     qemuStatic: qemu-arm-static
     project: $(listenerProjectFolder)
-    imageName: $(dockerRepositoryRoot)/$(listenerDockerRepositoryName):$(dockerTagBase)
+    imageName: $(listenerImageName)
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
 
@@ -57,7 +59,7 @@ jobs:
     arch: arm64
     archLong: arm64v8
     project: $(listenerProjectFolder)
-    imageName: $(dockerRepositoryRoot)/$(listenerDockerRepositoryName):$(dockerTagBase)
+    imageName: $(listenerImageName)
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
 
@@ -71,6 +73,6 @@ jobs:
 - template: build/tasks/linux.yaml
   parameters:
     project: $(listenerProjectFolder)
-    imageName: $(dockerRepositoryRoot)/$(listenerDockerRepositoryName):$(dockerTagBase)
+    imageName: $(listenerImageName)
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
