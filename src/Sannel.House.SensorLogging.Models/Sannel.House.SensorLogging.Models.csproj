@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
-    <PackageReference Include="Sannel.House.Sensor" Version="0.5.184-beta" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.415-beta" />
+    <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.435-beta" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+	<PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="3.0.89" />
   </ItemGroup>
 
 </Project>

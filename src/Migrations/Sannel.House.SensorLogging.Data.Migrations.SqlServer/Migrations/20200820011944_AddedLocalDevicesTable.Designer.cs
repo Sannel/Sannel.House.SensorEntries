@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sannel.House.SensorLogging.Data;
 
 namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
 {
     [DbContext(typeof(SensorLoggingContext))]
-    partial class SensorLoggingContextModelSnapshot : ModelSnapshot
+    [Migration("20200820011944_AddedLocalDevicesTable")]
+    partial class AddedLocalDevicesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,6 +70,9 @@ namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
                     b.Property<int>("SensorType")
                         .HasColumnType("int");
 
+                    b.Property<string>("Values")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("SensorEntryId");
 
                     b.HasIndex("LocalDeviceId");
@@ -75,41 +80,6 @@ namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
                     b.HasIndex("SensorType");
 
                     b.ToTable("SensorEntries");
-                });
-
-            modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
-                {
-                    b.Property<Guid?>("SensorReadingId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<Guid>("SensorEntryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("float");
-
-                    b.HasKey("SensorReadingId");
-
-                    b.HasIndex("Name");
-
-                    b.HasIndex("SensorEntryId");
-
-                    b.ToTable("SensorReading");
-                });
-
-            modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
-                {
-                    b.HasOne("Sannel.House.SensorLogging.Models.SensorEntry", "SensorEntry")
-                        .WithMany("Values")
-                        .HasForeignKey("SensorEntryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

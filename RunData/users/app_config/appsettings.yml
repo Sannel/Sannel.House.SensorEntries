@@ -1,0 +1,99 @@
+---
+https_port: 443
+Db:
+  Provider: sqlite
+  ConnectionString: Data Source=app_data/data.db
+  SeedDb: true
+  DbSeed:
+    ApiResources:
+    - Name: openid
+      DisplayName: Your user identifier
+      Enabled: true
+      UserClaims:
+      - Type: sub
+      - Type: role
+      Scopes:
+      - Name: openid
+        DisplayName: Your user identifier
+        Required: true
+    - Name: houseapi
+      DisplayName: Api for House Automation
+      Enabled: true
+      UserClaims:
+      - Type: role
+      Scopes:
+      - Name: sensors
+        DisplayName: Log and read sensor data
+        Required: false
+    Clients:
+    - ClientId: test-client
+      ClientName: Test Client
+      RequireClientSecret: true
+      RequireConsent: false
+      RequirePkce: false
+      AllowedGrantTypes:
+      - GrantType: password
+      AllowedScopes:
+      - Scope: openid
+      - Scope: sensors
+      ClientSecrets:
+      - Type: EncodeSharedSecret
+        Value: ClientPassword
+    - ClientId: gateway-client
+      ClientName: Gateway Client
+      RequireClientSecret: true
+      RequireConsent: false
+      RequirePkce: false
+      AllowOfflineAccess: true
+      RefreshTokenUsage: ReUse
+      UpdateAccessTokenClaimsOnRefresh: true
+      AllowedGrantTypes:
+      - GrantType: password
+      AllowedScopes:
+      - Scope: openid
+      ClientSecrets:
+      - Type: EncodeSharedSecret
+        Value: GatewayPassword
+    Roles:
+    - DeviceCreate
+    - DeviceRead
+    - DeviceWrite
+    - SensorStoreRead
+    - SensorStoreWrite
+    Users:
+      admin@asp.net:
+        Password: "@Password1"
+        Roles:
+        - DeviceCreate
+        - DeviceWrite
+        - DeviceRead
+        - SensorStoreRead
+        - SensorStoreWrite
+Logging:
+  LogLevel:
+    Default: Debug
+    System: Information
+    Microsoft: Information
+IdentityServer:
+  PublicOrigin: http://users.localtest.me:8181
+  SigningCredentialType: ecdsa
+  ECDsa:
+    Key: MHcCAQEEIGm1KV4Mow5wxBT9ee2k8nYIqnvczyvRmXZSsUk+tiBGoAoGCCqGSM49AwEHoUQDQgAEqcdqV5OWwM25DKXgN8cq5W0wrhcM9ghg7vXwDUEAinKkOYiZRxeKQEdof+Gb1J4mzraA4wQbnavdqMTLRkh92A==
+    KeyId: hQPOjrNxT7u4oZrF7HdHD0tIL
+  X509:
+    Path: app_config/adamholt.us.pfx
+    Password: "D9sPIrxqwfQoW0XEw3SZ"
+Kestrel:
+  Endpoints:
+    HTTPS:
+      Url: https://*:8433
+      Certificate:
+        Path: app_config/house.dev.local.pfx
+        Password: "@Password1"
+    HTTP:
+      Url: http://*:8181
+  Certificate:
+#    Path: app_config/house.dev.local.pfx
+#    Password: "@Password1"
+    Path: app_config/adamholt.us.pfx
+    Password: "D9sPIrxqwfQoW0XEw3SZ"

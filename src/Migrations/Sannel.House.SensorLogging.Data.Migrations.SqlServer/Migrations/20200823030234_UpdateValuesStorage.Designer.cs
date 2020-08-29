@@ -2,43 +2,45 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sannel.House.SensorLogging.Data;
 
-namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
+namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
 {
     [DbContext(typeof(SensorLoggingContext))]
-    partial class SensorLoggingContextModelSnapshot : ModelSnapshot
+    [Migration("20200823030234_UpdateValuesStorage")]
+    partial class UpdateValuesStorage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.Device", b =>
                 {
                     b.Property<Guid>("LocalDeviceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("DeviceId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<long?>("MacAddress")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Manufacture")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ManufactureId")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("Uuid")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LocalDeviceId");
 
@@ -57,16 +59,16 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("SensorEntryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("LocalDeviceId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SensorType")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("SensorEntryId");
 
@@ -81,18 +83,18 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
                 {
                     b.Property<Guid?>("SensorReadingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(256)")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<Guid>("SensorEntryId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Value")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.HasKey("SensorReadingId");
 

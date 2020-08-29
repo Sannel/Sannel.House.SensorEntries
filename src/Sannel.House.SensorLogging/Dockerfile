@@ -1,12 +1,12 @@
 #Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
 #For more information, please see https://aka.ms/containercompat
 
-FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
+EXPOSE 8443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /src
 COPY [".nuget/nuget.config", ".nuget/nuget.config"]
 COPY ["Directory.Build.props", "./"]
@@ -15,9 +15,11 @@ COPY ["src/Sannel.House.SensorLogging.Interfaces/Sannel.House.SensorLogging.Inte
 COPY ["src/Sannel.House.SensorLogging.Models/Sannel.House.SensorLogging.Models.csproj", "src/Sannel.House.SensorLogging.Models/"]
 COPY ["src/Migrations/Sannel.House.SensorLogging.Data.Migrations.Sqlite/Sannel.House.SensorLogging.Data.Migrations.Sqlite.csproj", "src/Migrations/Sannel.House.SensorLogging.Data.Migrations.Sqlite/"]
 COPY ["src/Sannel.House.SensorLogging.Data/Sannel.House.SensorLogging.Data.csproj", "src/Sannel.House.SensorLogging.Data/"]
-COPY ["src/Migrations/Sannel.House.SensorLogging.Data.Migrations.MySql/Sannel.House.SensorLogging.Data.Migrations.MySql.csproj", "src/Migrations/Sannel.House.SensorLogging.Data.Migrations.MySql/"]
+#COPY ["src/Migrations/Sannel.House.SensorLogging.Data.Migrations.MySql/Sannel.House.SensorLogging.Data.Migrations.MySql.csproj", "src/Migrations/Sannel.House.SensorLogging.Data.Migrations.MySql/"]
+COPY ["src/Migrations/Sannel.House.SensorLogging.Data.Migrations.PostgreSQL/Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.csproj", "src/Migrations/Sannel.House.SensorLogging.Data.Migrations.PostgreSQL/"]
 COPY ["src/Migrations/Sannel.House.SensorLogging.Data.Migrations.SqlServer/Sannel.House.SensorLogging.Data.Migrations.SqlServer.csproj", "src/Migrations/Sannel.House.SensorLogging.Data.Migrations.SqlServer/"]
 COPY ["src/Sannel.House.SensorLogging.Repositories/Sannel.House.SensorLogging.Repositories.csproj", "src/Sannel.House.SensorLogging.Repositories/"]
+COPY ["src/Sannel.House.SensorLogging.Services/Sannel.House.SensorLogging.Services.csproj", "src/Sannel.House.SensorLogging.Services/"]
 RUN dotnet restore --configfile ".nuget/nuget.config" "src/Sannel.House.SensorLogging/Sannel.House.SensorLogging.csproj"
 COPY . .
 WORKDIR "/src/src/Sannel.House.SensorLogging"

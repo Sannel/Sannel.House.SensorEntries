@@ -1,25 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-		<PackageReference Include="altcover" Version="5.3.675" />
+		<PackageReference Include="altcover" Version="7.1.782" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="Moq" Version="4.11.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
-    <PackageReference Include="Sannel.House.Sensor" Version="0.5.184-beta" />
-	<PackageReference Include="Sannel.House.Test" Version="0.5.184-beta" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+		<PackageReference Include="Moq" Version="4.14.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
+    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.415-beta" />
+    <PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.473-beta" />
+    <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.435-beta" />
+    <PackageReference Include="Sannel.House.Base.Tests" Version="0.9.427-beta" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -27,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.Sqlite\Sannel.House.SensorLogging.Data.Migrations.Sqlite.csproj" />
-    <ProjectReference Include="..\Sannel.House.SensorLogging.Client\Sannel.House.SensorLogging.Client.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj" />

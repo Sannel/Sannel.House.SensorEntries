@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sannel.House.SensorLogging.Data;
@@ -9,9 +10,10 @@ using Sannel.House.SensorLogging.Data;
 namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
 {
     [DbContext(typeof(SensorLoggingContext))]
-    partial class SensorLoggingContextModelSnapshot : ModelSnapshot
+    [Migration("20200819202243_AddedLocalDevicesTable")]
+    partial class AddedLocalDevicesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,6 +70,9 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
                     b.Property<int>("SensorType")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Values")
+                        .HasColumnType("text");
+
                     b.HasKey("SensorEntryId");
 
                     b.HasIndex("LocalDeviceId");
@@ -75,41 +80,6 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
                     b.HasIndex("SensorType");
 
                     b.ToTable("SensorEntries");
-                });
-
-            modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
-                {
-                    b.Property<Guid?>("SensorReadingId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<Guid>("SensorEntryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("SensorReadingId");
-
-                    b.HasIndex("Name");
-
-                    b.HasIndex("SensorEntryId");
-
-                    b.ToTable("SensorReading");
-                });
-
-            modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
-                {
-                    b.HasOne("Sannel.House.SensorLogging.Models.SensorEntry", "SensorEntry")
-                        .WithMany("Values")
-                        .HasForeignKey("SensorEntryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -28,13 +28,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data.Migrations.SqlServer", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.SqlServer\Sannel.House.SensorLogging.Data.Migrations.SqlServer.csproj", "{C0E5234D-943B-493C-B80B-E1DF9C29AD21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data.Migrations.MySql", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.MySql\Sannel.House.SensorLogging.Data.Migrations.MySql.csproj", "{8B936EA5-86BB-4A8F-9ACB-DB6F14201092}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Client", "src\Sannel.House.SensorLogging.Client\Sannel.House.SensorLogging.Client.csproj", "{74371D53-F6BB-4BDD-97D7-DCD2C7D81EE4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Tests", "src\Sannel.House.SensorLogging.Tests\Sannel.House.SensorLogging.Tests.csproj", "{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Data.Migrations.PostgreSQL", "src\Migrations\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.csproj", "{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Services", "src\Sannel.House.SensorLogging.Services\Sannel.House.SensorLogging.Services.csproj", "{05496273-D752-4C67-BDE5-279B9CB16BFE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sannel.House.SensorLogging.Listener", "src\Sannel.House.SensorLogging.Listener\Sannel.House.SensorLogging.Listener.csproj", "{8C46C86D-24EF-4818-A121-B9D5DD282C06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,14 +74,6 @@ Global
 		{C0E5234D-943B-493C-B80B-E1DF9C29AD21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0E5234D-943B-493C-B80B-E1DF9C29AD21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0E5234D-943B-493C-B80B-E1DF9C29AD21}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B936EA5-86BB-4A8F-9ACB-DB6F14201092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B936EA5-86BB-4A8F-9ACB-DB6F14201092}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B936EA5-86BB-4A8F-9ACB-DB6F14201092}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B936EA5-86BB-4A8F-9ACB-DB6F14201092}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74371D53-F6BB-4BDD-97D7-DCD2C7D81EE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74371D53-F6BB-4BDD-97D7-DCD2C7D81EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74371D53-F6BB-4BDD-97D7-DCD2C7D81EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74371D53-F6BB-4BDD-97D7-DCD2C7D81EE4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DDA23DE-7373-4967-A427-CBAEB1C0CBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,6 +82,14 @@ Global
 		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05496273-D752-4C67-BDE5-279B9CB16BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05496273-D752-4C67-BDE5-279B9CB16BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05496273-D752-4C67-BDE5-279B9CB16BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05496273-D752-4C67-BDE5-279B9CB16BFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C46C86D-24EF-4818-A121-B9D5DD282C06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C46C86D-24EF-4818-A121-B9D5DD282C06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C46C86D-24EF-4818-A121-B9D5DD282C06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C46C86D-24EF-4818-A121-B9D5DD282C06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,7 +97,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{55664148-CAE6-4145-A9EA-B63950D1EC2A} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{C0E5234D-943B-493C-B80B-E1DF9C29AD21} = {EDB22547-363D-41E7-98A1-81D5949652D6}
-		{8B936EA5-86BB-4A8F-9ACB-DB6F14201092} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 		{17C088A4-3B33-40CA-98A5-3D0AA162D0B5} = {EDB22547-363D-41E7-98A1-81D5949652D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

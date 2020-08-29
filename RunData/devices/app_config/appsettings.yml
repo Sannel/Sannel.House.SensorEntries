@@ -1,0 +1,23 @@
+---
+Db:
+  Provider: sqlite
+  ConnectionString: Data Source=app_data/data.db
+Authentication:
+  AuthorityUrl: http://users.localtest.me:8181
+  Schema: houseapi
+  ApiName: houseapi
+  ApiSecret: "@KiHRt7Uj0zssPlg2YvffMsUEd"
+  DisableRequireHttpsMetadata: true
+MQTT:
+  Server: mqtt.localtest.me
+  DefaultTopic: local/house/devices
+  Port: 1883
+Logging:
+  LogLevel:
+    Default: Debug
+    System: Information
+    Microsoft: Information
+Kestrel:
+  Endpoints:
+    HTTP:
+      Url: http://*:8080

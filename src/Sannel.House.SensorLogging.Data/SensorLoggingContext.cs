@@ -10,7 +10,7 @@
    limitations under the License.*/
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Sannel.House.SensorLogging.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +21,7 @@ namespace Sannel.House.SensorLogging.Data
 	public class SensorLoggingContext : DbContext
 	{
 		public DbSet<SensorEntry> SensorEntries { get; set; }
+		public DbSet<Device> Devices { get; set; }
 
 		public SensorLoggingContext(DbContextOptions options) : base(options)
 		{
@@ -31,18 +32,31 @@ namespace Sannel.House.SensorLogging.Data
 			base.OnModelCreating(modelBuilder);
 
 			var se = modelBuilder.Entity<SensorEntry>();
-			se.Property(i => i.Values)
-				.HasConversion(
-					j => (j == null)?null:JsonConvert.SerializeObject(j),
-					k => (k == null)?null:JsonConvert.DeserializeObject<Dictionary<string, double>>(k));
+			//se.Property(i => i.Values)
+				//.HasConversion(
+				//	j => (j == null)?null:JsonSerializer.Serialize(j, null),
+				//	k => (k == null)?null:JsonSerializer.Deserialize<Dictionary<string, double>>(k, null));
 			se.Property(i => i.SensorType)
 				.HasConversion(
 					j => (int)j,
-					k => (Sensor.SensorTypes)k
+					k => (Base.Sensor.SensorTypes)k
 				);
 
-			se.HasIndex(i => i.DeviceId);
+			se.HasMany(i => i.Values).WithOne("SensorEntry");
+
+			se.HasIndex(i => i.LocalDeviceId);
 			se.HasIndex(i => i.SensorType);
+
+			var sr = modelBuilder.Entity<SensorReading>();
+			sr.Property(i => i.Name).IsRequired();
+			sr.Property(i => i.Value).IsRequired();
+			sr.HasIndex(i => i.Name);
+
+			var d = modelBuilder.Entity<Device>();
+			d.HasIndex(i => i.DeviceId);
+			d.HasIndex(i => i.Uuid);
+			d.HasIndex(i => i.MacAddress);
+			d.HasIndex(nameof(Device.Manufacture), nameof(Device.ManufactureId));
 		}
 	}
 }

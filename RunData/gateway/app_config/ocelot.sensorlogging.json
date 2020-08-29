@@ -1,17 +1,38 @@
 {
-	"ReRoutes": [
+	"Routes":[
 		{
 			"DownstreamHostAndPorts": [
 				{
-					"Host": "sensorlogging.house.dev.local",
-					"Port": 80
+					"Host": "sensorlogging.localtest.me",
+					"Port": 8080
 				}
 			],
 			"DownstreamPathTemplate": "/api/sensorlogging",
 			"UpstreamPathTemplate": "/api/v1/sensorlogging",
-			"UpstreamHttpMethod": [ "Post" ],
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
 			"ReRouteIsCaseSensitive": false,
-			"DownstreamScheme": "http"
+			"DownstreamScheme": "http",
+			"AuthenticationOptions": {
+				"AuthenticationProviderKey": "houseapi",
+				"AllowedScopes": [ "sensors" ]
+			}
+		},
+		{
+			"DownstreamHostAndPorts": [
+				{
+					"Host": "sensorlogging.localtest.me",
+					"Port": 8080
+				}
+			],
+			"DownstreamPathTemplate": "/api/sensorlogging/{url}",
+			"UpstreamPathTemplate": "/api/v1/sensorlogging/{url}",
+			"UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+			"ReRouteIsCaseSensitive": false,
+			"DownstreamScheme": "http",
+			"AuthenticationOptions": {
+				"AuthenticationProviderKey": "houseapi",
+				"AllowedScopes": [ "sensors" ]
+			}
 		}
 	]
 }

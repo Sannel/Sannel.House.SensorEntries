@@ -1,4 +1,4 @@
-/* Copyright 2019-2020 Sannel Software, L.L.C.
+/* Copyright 2020-2020 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -9,28 +9,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Sannel.House.SensorLogging.Controllers;
-using Sannel.House.SensorLogging.Interfaces;
-using Sannel.House.SensorLogging.ViewModel;
-using Sannel.House.SensorLogging.Services;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using System.Linq;
-using Moq.Protected;
-using System.Threading;
-using Newtonsoft.Json;
-using Sannel.House.SensorLogging.Models;
 
-namespace Sannel.House.SensorLogging.Tests.Controllers
+namespace Sannel.House.SensorLogging.Models
 {
-	public class SensorLoggingControllerTests : BaseTest
+	public class DeviceMessage
 	{
+		public int? DeviceId { get; set; }
+
+		public DateTimeOffset DateCreated { get; set; }
+
+		public IList<AlternateIdMessage> AlternateIds { get; set; }
+
 	}
 }

@@ -1,0 +1,31 @@
+---
+GlobalConfiguration:
+  BaseUrl: http://gateway.localtest.me
+Authentication:
+  AuthorityUrl: http://users.localtest.me:8181
+  Schema: houseapi
+  ApiName: houseapi
+  ApiSecret: GatewayPassword
+  DisableRequireHttpsMetadata: true
+HealthChecks: 
+- "http://users.localtest.me:8181/health?json"
+- "http://devices.localtest.me:8080/health?json"
+- "http://sensorlogging.localtest.me:8080/health?json"
+Cors:
+  Origins:
+  - Any
+  Headers:
+  - Any
+  Methods:
+  - Any
+  AllowWildCardDomains: false
+  AllowCredentials: false
+Kestrel:
+  Endpoints:
+    HTTP:
+      Url: http://*:8080
+#    HTTPS:
+#      Url: https://*:443
+#      Certificate:
+#        Path: app_config/house.dev.local.pfx
+#        Password: "@Password1"

@@ -1,0 +1,16 @@
+Db:
+  Provider: sqlite # sqlite, sqlserver, postgresql
+  ConnectionString: "Data Source=app_data/data.db"
+MQTT:
+  Server: mqtt.localtest.me
+  Port: 1883
+  SensorLoggingTopic: local/house/sensor/field/reading
+  NewReadingTopic: local/house/sensor/reading
+  UnknownDeviceTopic: local/house/devices/unknown
+  DevicesTopic: local/house/devices
+
+Logging:
+  LogLevel:
+    Default: Debug
+    System: Debug
+    Microsoft: Debug

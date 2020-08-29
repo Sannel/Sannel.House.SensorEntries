@@ -1,4 +1,4 @@
-/* Copyright 2019 Sannel Software, L.L.C.
+/* Copyright 2019-2020 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -8,6 +8,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,17 +16,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sannel.House.SensorLogging.Data;
-using Sannel.House.Data;
+using Sannel.House.Base.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.Extensions.Logging;
-using Sannel.House.Web;
-using Sannel.House.Devices.Client;
+using Sannel.House.Base.Web;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Sannel.House.SensorLogging.Interfaces;
 using Sannel.House.SensorLogging.Repositories;
+using Microsoft.Extensions.Hosting;
+using Sannel.House.SensorLogging.Services;
 
 namespace Sannel.House.SensorLogging
 {
@@ -39,59 +41,77 @@ namespace Sannel.House.SensorLogging
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
 			services.AddDbContextPool<SensorLoggingContext>(o =>
 			{
-				switch (Configuration["Db:Provider"])
+				var connectionString = Configuration.GetWithReplacement("Db:ConnectionString");
+				switch(Configuration["Db:Provider"]?.ToLower())
 				{
 					case "mysql":
-						o.ConfigureMySql(Configuration["Db:ConnectionString"]);
-						break;
+						throw new NotSupportedException("MySql is no longer supported");
+
 					case "sqlserver":
-						o.ConfigureSqlServer(Configuration["Db:ConnectionString"]);
+						o.ConfigureSqlServer(connectionString);
 						break;
-					case "PostgreSQL":
+
 					case "postgresql":
-						o.ConfigurePostgreSQL(Configuration["Db:ConnectionString"]);
+						o.ConfigurePostgreSQL(connectionString);
 						break;
+
 					case "sqlite":
 					default:
-						o.ConfigureSqlite(Configuration["Db:ConnectionString"]);
+						o.ConfigureSqlite(connectionString);
 						break;
-				}
+				};
 			});
 
+			services.AddControllers();
 
-			services.AddAuthentication("houseapi")
-			.AddIdentityServerAuthentication("houseapi", o =>
-			{
-				o.Authority = this.Configuration["Authentication:AuthorityUrl"];
-				o.ApiName = this.Configuration["Authentication:ApiName"];
-				o.SupportedTokens = SupportedTokens.Both;
-				if (this.Configuration.GetValue<bool?>("Authentication:DisableRequireHttpsMetadata") == true)
-				{
-					o.RequireHttpsMetadata = false;
-				}
-			});
 
-			services.AddDevicesClient(new Uri(Configuration["Client:DevicesBaseUrl"]));
+			services.AddAuthentication(Configuration["Authentication:Schema"])
+				.AddIdentityServerAuthentication(Configuration["Authentication:Schema"], o =>
+					{
+						o.Authority = this.Configuration["Authentication:AuthorityUrl"];
+						o.ApiName = this.Configuration["Authentication:ApiName"];
+
+						var apiSecret = this.Configuration["Authentication:ApiSecret"];
+						if (!string.IsNullOrWhiteSpace(apiSecret))
+						{
+							o.ApiSecret = apiSecret;
+						}
+
+						o.SupportedTokens = SupportedTokens.Both;
+
+						if (Configuration.GetValue<bool?>("Authentication:DisableRequireHttpsMetadata") == true)
+						{
+							o.RequireHttpsMetadata = false;
+						}
+					});
+
+
 
 			services.AddTransient<ISensorRepository, DbContextRepository>();
 
-			services.AddSwaggerDocument();
+			services.AddOpenApiDocument((s, p) =>
+			{
+				s.Title = "Sensor Logging";
+				s.Description = "Project for logging sensor data";
+			});
+
+			services.AddMqttService(Configuration["MQTT:Server"],
+				Configuration["MQTT:DefaultTopic"],
+				Configuration.GetValue<int?>("MQTT:Port"));
+
+			services.AddTransient<ISensorService, SensorService>();
 
 			services.AddHealthChecks()
 				.AddDbHealthCheck<SensorLoggingContext>("DbHealthCheck", async (context) =>
 				{
 					await context.SensorEntries.Take(1).CountAsync();
 				});
-
-
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider provider, ILogger<Startup> logger)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider provider, ILogger<Startup> logger)
 		{
 			provider.CheckAndInstallTrustedCertificate();
 
@@ -109,7 +129,7 @@ namespace Sannel.House.SensorLogging
 			}
 
 			db.Database.Migrate();
- 
+
 
 			if (env.IsDevelopment())
 			{
@@ -118,18 +138,28 @@ namespace Sannel.House.SensorLogging
 			else
 			{
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
+				//app.UseHsts();
 			}
 
-			app.UseHealthChecks("/health");
+			app.UseHouseHealthChecks("/health");
+
+			app.UseRouting();
 
 			app.UseAuthentication();
-			app.UseHttpsRedirection();
+			app.UseAuthorization();
+			//app.UseHttpsRedirection();
 
-			app.UseSwagger();
-			app.UseSwaggerUi3();
 
-			app.UseMvc();
+			app.UseHouseRobotsTxt();
+
+			app.UseOpenApi();
+			app.UseReDoc();
+
+			app.UseEndpoints(i =>
+			{
+				i.MapControllers();
+			});
+
 		}
 	}
 }
