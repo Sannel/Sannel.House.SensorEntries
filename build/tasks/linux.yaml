@@ -26,7 +26,7 @@ jobs:
       displayName: 'dotnet restore'
       inputs:
         command: custom
-        projects: $(mainProjectPath)
+        projects: src/$(project)/$(project).csproj
         custom: restore
         arguments: '-r linux-x64 --configfile .nuget/nuget.config'
         feedsToUse: config
@@ -36,14 +36,14 @@ jobs:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Release'
       inputs:
-        projects: $(mainProjectPath)
+        projects: src/$(project)/$(project).csproj
         arguments: '-r linux-x64 -c Release'
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
     - task: DotNetCoreCLI@2
       displayName: 'dotnet build Debug'
       inputs:
-        projects: $(mainProjectPath)
+        projects: src/$(project)/$(project).csproj
         arguments: '-r linux-x64 -c Debug'
       condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/master'))
 
@@ -52,7 +52,7 @@ jobs:
       inputs:
         command: publish
         publishWebProjects: false
-        projects: $(mainProjectPath)
+        projects: src/$(project)/$(project).csproj
         arguments: '-r linux-x64 -o $(Build.StagingDirectory)'
         zipAfterPublish: false
 
@@ -78,17 +78,17 @@ jobs:
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
       inputs:
-        SourceFolder: '$(mainConfigPath)'
+        SourceFolder: 'src/$(project)/app_config'
         Contents: |
           **/*.json
           **/*.yml
           **/*.pfx
           **/*.crt
-        TargetFolder: '$(Build.StagingDirectory)/$(projectFolder)/app_config/'
+        TargetFolder: '$(Build.StagingDirectory)/$(project)/app_config/'
 
     - powershell: |
-        New-Item -Type Directory -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/
-        New-Item -Type File -Force $(Build.StagingDirectory)/$(projectFolder)/app_data/.hold
+        New-Item -Type Directory -Force $(Build.StagingDirectory)/$(project)/app_data/
+        New-Item -Type File -Force $(Build.StagingDirectory)/$(project)/app_data/.hold
         
         copy-item -Force -Verbose build/linux-x64/Dockerfile $(Build.StagingDirectory)/
       displayName: 'Prepare Items'
