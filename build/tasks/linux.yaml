@@ -5,7 +5,6 @@ parameters:
   jobName: "main"
   project: ""
   imageName: ""
-  dockerRepositoryName: ""
 
 jobs:
 - job: linux_x64_${{parameters['jobName']}}
@@ -13,7 +12,6 @@ jobs:
   variables:
     project: ${{parameters['project']}}
     imageName: ${{parameters['imageName']}}
-    dockerRepositoryName: ${{parameters['dockerRepositoryName']}}
   condition: ne(variables['disableLinux'], 'true')
   steps:
     - task: UseDotNet@2
@@ -101,7 +99,7 @@ jobs:
         Dockerfile: '$(Build.StagingDirectory)/Dockerfile'
         buildContext: '$(Build.StagingDirectory)'
         tags: '$(imageTag)-linux-x64'
-        arguments: '--build-arg tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong) --build-arg project=$(project)'
+        arguments: '--build-arg tag=$(tagVersion) --build-arg project=$(project)'
     - powershell: |
         $img = "$(imageName):$(imageTag)".ToLower()
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.x64.tar "${img}-linux-x64"
