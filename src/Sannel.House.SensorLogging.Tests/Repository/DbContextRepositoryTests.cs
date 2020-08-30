@@ -8,6 +8,8 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+using Microsoft.EntityFrameworkCore;
+using Sannel.House.Base.Sensor;
 using Sannel.House.SensorLogging.Models;
 using Sannel.House.SensorLogging.Repositories;
 using System;
@@ -38,46 +40,32 @@ namespace Sannel.House.SensorLogging.Tests.Repository
 			using (var context = CreateTestDB())
 			{
 				var repo = new DbContextRepository(context, CreateLogger<DbContextRepository>());
-				await Assert.ThrowsAsync<ArgumentNullException>(() => repo.AddSensorEntryAsync(null));
 
 				context.SensorEntries.RemoveRange(context.SensorEntries);
 				await context.SaveChangesAsync();
 
-				var entry = new SensorEntry()
+				var device = await repo.AddDeviceByUuidAsync(Guid.NewGuid());
+
+				var values = new Dictionary<string, double>()
 				{
-					SensorEntryId = Guid.Empty,
-					CreationDate = DateTime.UtcNow,
-					DeviceId = 20,
-					SensorType = Sensor.SensorTypes.Temperature,
-					Values = new Dictionary<string, double>()
-					{
-						{"Value", 13.5 }
-					}
+					{"Value", 13.5 }
 				};
+				await repo.AddSensorEntryAsync(Base.Sensor.SensorTypes.Temperature,
+					device.LocalDeviceId,
+					values);
 
-				await repo.AddSensorEntryAsync(entry);
 				Assert.Single(context.SensorEntries);
-				var first = context.SensorEntries.First();
+				var first = context.SensorEntries.Include(i => i.Values).First();
 				Assert.NotEqual(Guid.Empty, first.SensorEntryId);
-				Assert.Equal(entry.CreationDate, first.CreationDate);
-				Assert.Equal(entry.DeviceId, first.DeviceId);
-				Assert.Equal(entry.SensorType, first.SensorType);
-				Assert.Equal(entry.Values, first.Values);
+				Assert.Equal(device.LocalDeviceId, first.LocalDeviceId);
+				Assert.Equal(SensorTypes.Temperature, first.SensorType);
+				Assert.True(first.CreationDate >= DateTimeOffset.UtcNow.AddMinutes(-1) &&
+					first.CreationDate <= DateTimeOffset.UtcNow.AddMinutes(1));
+				Assert.Single(first.Values);
 
+				context.Devices.RemoveRange(context.Devices);
 				context.SensorEntries.RemoveRange(context.SensorEntries);
 				await context.SaveChangesAsync();
-
-				var guid = Guid.NewGuid();
-				entry.SensorEntryId = guid;
-				await repo.AddSensorEntryAsync(entry);
-
-				Assert.Single(context.SensorEntries);
-				first = context.SensorEntries.First();
-				Assert.Equal(guid, first.SensorEntryId);
-				Assert.Equal(entry.CreationDate, first.CreationDate);
-				Assert.Equal(entry.DeviceId, first.DeviceId);
-				Assert.Equal(entry.SensorType, first.SensorType);
-				Assert.Equal(entry.Values, first.Values);
 			}
 		}
 	}
