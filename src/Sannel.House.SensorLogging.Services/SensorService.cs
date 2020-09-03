@@ -48,18 +48,29 @@ namespace Sannel.House.SensorLogging.Services
 		{
 			this.mqttClient = mqttClient ?? throw new ArgumentNullException(nameof(mqttClient));
 			this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+			if(configuration is null)
+			{
+				throw new ArgumentNullException(nameof(configuration));
+			}
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			newReadingTopic = configuration["MQTT:NewReadingTopic"];
 			unknownDeviceTopic = configuration["MQTT:UnknownDeviceTopic"];
 		}
 
-		public async Task AddSensorEntryAsync(SensorTypes sensorType, DateTimeOffset creationDate, Dictionary<string, double> values, long deviceMacAddress)
+		/// <summary>
+		/// Adds the sensor entry asynchronous.
+		/// </summary>
+		/// <param name="sensorType">Type of the sensor.</param>
+		/// <param name="creationDate">The creation date.</param>
+		/// <param name="values">The values.</param>
+		/// <param name="deviceMacAddress">The device mac address.</param>
+		/// <exception cref="NullReferenceException">Unable to create a device for some reason</exception>
+		public async Task AddSensorEntryAsync(SensorTypes sensorType, Dictionary<string, double> values, long deviceMacAddress)
 		{
 			var device = await repository.GetDeviceByMacAddressAsync(deviceMacAddress);
 			if(device is null)
 			{
 				device = await repository.AddDeviceByMacAddressAsync(deviceMacAddress);
-
 			}
 
 			if(device is null)
@@ -91,7 +102,14 @@ namespace Sannel.House.SensorLogging.Services
 			}
 		}
 
-		public async Task AddSensorEntryAsync(SensorTypes sensorType, DateTimeOffset creationDate, Dictionary<string, double> values, Guid deviceUuid)
+		/// <summary>
+		/// Adds the sensor entry asynchronous.
+		/// </summary>
+		/// <param name="sensorType">Type of the sensor.</param>
+		/// <param name="values">The values.</param>
+		/// <param name="deviceUuid">The device UUID.</param>
+		/// <exception cref="NullReferenceException">Unable to create a device for some reason</exception>
+		public async Task AddSensorEntryAsync(SensorTypes sensorType, Dictionary<string, double> values, Guid deviceUuid)
 		{
 			var device = await repository.GetDeviceByUuidAsync(deviceUuid);
 			if(device is null)
@@ -129,7 +147,15 @@ namespace Sannel.House.SensorLogging.Services
 			}
 		}
 
-		public async Task AddSensorEntryAsync(SensorTypes sensorType, DateTimeOffset creationDate, Dictionary<string, double> values, string manufacture, string manufactureId)
+		/// <summary>
+		/// Adds the sensor entry asynchronous.
+		/// </summary>
+		/// <param name="sensorType">Type of the sensor.</param>
+		/// <param name="values">The values.</param>
+		/// <param name="manufacture">The manufacture.</param>
+		/// <param name="manufactureId">The manufacture identifier.</param>
+		/// <exception cref="NullReferenceException">Unable to create a device for some reason</exception>
+		public async Task AddSensorEntryAsync(SensorTypes sensorType, Dictionary<string, double> values, string manufacture, string manufactureId)
 		{
 			var device = await repository.GetDeviceByManufactureIdAsync(manufacture, manufactureId);
 			if(device is null)
@@ -174,6 +200,6 @@ namespace Sannel.House.SensorLogging.Services
 		/// <param name="deviceMessage">The device message.</param>
 		/// <returns></returns>
 		public Task UpdateDeviceInformationFromMessageAsync(DeviceMessage deviceMessage)
-			=> repository.UpdateDeviceInformationFromMessageAsync(deviceMessage);
+			=> repository.UpdateDeviceInformationFromMessageAsync(deviceMessage ?? throw new ArgumentNullException(nameof(deviceMessage)));
 	}
 }

@@ -15,10 +15,10 @@ namespace Sannel.House.SensorLogging.ViewModel
 {
 	public class ManufactureIdReading : ReadingBase
 	{
-		[Required]
+		[Required(AllowEmptyStrings = false)]
 		public string Manufacture { get; set; }
 
-		[Required]
+		[Required(AllowEmptyStrings = false)]
 		public string ManufactureId { get; set; }
 	}
 }

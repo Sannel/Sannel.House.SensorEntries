@@ -35,6 +35,125 @@ namespace Sannel.House.SensorLogging.Tests.Repository
 		}
 
 		[Fact]
+		public async Task AddDeviceByMacAddressAsync()
+		{
+			using var context = CreateTestDB();
+			context.Devices.RemoveRange(context.Devices);
+			await context.SaveChangesAsync();
+
+			var repo = new DbContextRepository(context, CreateLogger<DbContextRepository>());
+
+			for (var i = 0; i < 100; i++)
+			{
+				var macAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue);
+
+				var device = await repo.AddDeviceByMacAddressAsync(macAddress);
+
+				Assert.NotNull(device);
+				Assert.NotEqual(default, device.LocalDeviceId);
+				Assert.Null(device.DeviceId);
+				Assert.Null(device.Uuid);
+				Assert.Null(device.Manufacture);
+				Assert.Null(device.ManufactureId);
+				Assert.Equal(macAddress, device.MacAddress);
+
+				Assert.Single(context.Devices);
+				device = context.Devices.First();
+				Assert.NotNull(device);
+				Assert.NotEqual(default, device.LocalDeviceId);
+				Assert.Null(device.DeviceId);
+				Assert.Null(device.Uuid);
+				Assert.Null(device.Manufacture);
+				Assert.Null(device.ManufactureId);
+				Assert.Equal(macAddress, device.MacAddress);
+
+				context.Devices.RemoveRange(context.Devices);
+				await context.SaveChangesAsync();
+			}
+
+
+		}
+
+		[Fact]
+		public async Task AddDeviceByUuidAsync()
+		{
+			using var context = CreateTestDB();
+			context.Devices.RemoveRange(context.Devices);
+			await context.SaveChangesAsync();
+
+			var repo = new DbContextRepository(context, CreateLogger<DbContextRepository>());
+
+			for (var i = 0; i < 100; i++)
+			{
+				var uuid = Guid.NewGuid();
+
+				var device = await repo.AddDeviceByUuidAsync(uuid);
+
+				Assert.NotNull(device);
+				Assert.NotEqual(default, device.LocalDeviceId);
+				Assert.Null(device.DeviceId);
+				Assert.Equal(uuid, device.Uuid);
+				Assert.Null(device.Manufacture);
+				Assert.Null(device.ManufactureId);
+				Assert.Null(device.MacAddress);
+
+				Assert.Single(context.Devices);
+				device = context.Devices.First();
+				Assert.NotNull(device);
+				Assert.NotEqual(default, device.LocalDeviceId);
+				Assert.Null(device.DeviceId);
+				Assert.Equal(uuid, device.Uuid);
+				Assert.Null(device.Manufacture);
+				Assert.Null(device.ManufactureId);
+				Assert.Null(device.MacAddress);
+
+				context.Devices.RemoveRange(context.Devices);
+				await context.SaveChangesAsync();
+			}
+		}
+
+		[Fact]
+		public async Task AddDeviceByManufactureAsync()
+		{
+			using var context = CreateTestDB();
+			context.Devices.RemoveRange(context.Devices);
+			await context.SaveChangesAsync();
+
+			var repo = new DbContextRepository(context, CreateLogger<DbContextRepository>());
+
+			for (var i = 0; i < 100; i++)
+			{
+				var manufacture = Guid.NewGuid().ToString();
+				var manufactureId = Guid.NewGuid().ToString();
+
+				var device = await repo.AddDeviceByManufactureIdAsync(manufacture, manufactureId);
+
+				Assert.NotNull(device);
+				Assert.NotEqual(default, device.LocalDeviceId);
+				Assert.Null(device.DeviceId);
+				Assert.Null(device.Uuid);
+				Assert.Null(device.MacAddress);
+				Assert.Equal(manufacture, device.Manufacture);
+				Assert.Equal(manufactureId, device.ManufactureId);
+
+				Assert.Single(context.Devices);
+				device = context.Devices.First();
+				Assert.NotNull(device);
+				Assert.NotEqual(default, device.LocalDeviceId);
+				Assert.Null(device.DeviceId);
+				Assert.Null(device.Uuid);
+				Assert.Null(device.MacAddress);
+				Assert.Equal(manufacture, device.Manufacture);
+				Assert.Equal(manufactureId, device.ManufactureId);
+
+				context.Devices.RemoveRange(context.Devices);
+				await context.SaveChangesAsync();
+			}
+
+
+		}
+
+		[Fact]
 		public async Task AddSensoryEntryAsyncTest()
 		{
 			using (var context = CreateTestDB())

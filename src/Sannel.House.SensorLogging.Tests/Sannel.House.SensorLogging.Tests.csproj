@@ -30,6 +30,7 @@
     <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.Sqlite\Sannel.House.SensorLogging.Data.Migrations.Sqlite.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Listener\Sannel.House.SensorLogging.Listener.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Repositories\Sannel.House.SensorLogging.Repositories.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging\Sannel.House.SensorLogging.csproj" />

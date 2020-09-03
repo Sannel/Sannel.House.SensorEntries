@@ -49,13 +49,13 @@ namespace Sannel.House.SensorLogging.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await service.AddSensorEntryAsync(reading.SensorType, DateTimeOffset.Now, reading.Values, reading.MacAddress);
+				await service.AddSensorEntryAsync(reading.SensorType, reading.Values, reading.MacAddress);
 
 				return Ok(new ResponseModel(HttpStatusCode.OK));
 			}
 			else
 			{
-				logger.LogInformation($"{nameof(AddWithMacAddress)}: Invalid Model for MacAddress {reading.MacAddress}");
+				logger.LogInformation($"{nameof(AddWithMacAddress)}: Invalid Model for MacAddress {reading?.MacAddress}");
 				return BadRequest(new ErrorResponseModel(HttpStatusCode.BadRequest, "Invalid Model").FillWithStateDictionary(ModelState));
 			}
 		}
@@ -68,7 +68,7 @@ namespace Sannel.House.SensorLogging.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await service.AddSensorEntryAsync(reading.SensorType, DateTimeOffset.Now, reading.Values, reading.Uuid);
+				await service.AddSensorEntryAsync(reading.SensorType, reading.Values, reading.Uuid);
 
 				return Ok(new ResponseModel(HttpStatusCode.OK));
 			}
@@ -88,7 +88,7 @@ namespace Sannel.House.SensorLogging.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				await service.AddSensorEntryAsync(reading.SensorType, DateTimeOffset.Now, reading.Values, reading.Manufacture, reading.ManufactureId);
+				await service.AddSensorEntryAsync(reading.SensorType, reading.Values, reading.Manufacture, reading.ManufactureId);
 
 				return Ok(new ResponseModel(HttpStatusCode.OK));
 			}

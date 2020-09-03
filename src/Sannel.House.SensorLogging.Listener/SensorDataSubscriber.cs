@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Base.MQTT.Interfaces;
@@ -40,8 +41,17 @@ namespace Sannel.House.SensorLogging.Listener
 			private set;
 		}
 
-		public async void Message(string topic, string message)
+		public async void Message(string topic, string message) 
+			=> await MessageAsync(topic, message);
+
+		internal async Task MessageAsync(string topic, string message)
 		{
+			if(string.IsNullOrWhiteSpace(message))
+			{
+				logger.LogError("Received invalid message on topic {0}", topic);
+				return;
+			}
+
 			var options = new JsonSerializerOptions()
 			{
 				PropertyNameCaseInsensitive = true
@@ -49,35 +59,42 @@ namespace Sannel.House.SensorLogging.Listener
 
 			options.Converters.Add(new JsonStringEnumConverter());
 
-			var reading = JsonSerializer.Deserialize<FieldReading>(message, options);
+			try
+			{
+				var reading = JsonSerializer.Deserialize<FieldReading>(message, options);
 
-			if(logger.IsEnabled(LogLevel.Debug))
-			{
-				logger.LogDebug($"topic={topic} message={message}");
-			}
+				if (logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug($"topic={topic} message={message}");
+				}
 
-			if(reading is null)
-			{
-				logger.LogError($"Received invalid message on topic {topic}");
-				return;
-			}
+				if (reading is null)
+				{
+					logger.LogError($"Received invalid message on topic {topic}");
+					return;
+				}
 
-			if(reading.MacAddress.HasValue)
-			{
-				await service.AddSensorEntryAsync(reading.SensorType, DateTimeOffset.Now, reading.Values, reading.MacAddress.Value);
+				if (reading.MacAddress.HasValue)
+				{
+					await service.AddSensorEntryAsync(reading.SensorType, reading.Values, reading.MacAddress.Value);
+				}
+				else if (reading.Uuid.HasValue)
+				{
+					await service.AddSensorEntryAsync(reading.SensorType, reading.Values, reading.Uuid.Value);
+				}
+				else if (!string.IsNullOrWhiteSpace(reading.Manufacture) && !string.IsNullOrWhiteSpace(reading.ManufactureId))
+				{
+					await service.AddSensorEntryAsync(reading.SensorType,
+						reading.Values, reading.Manufacture, reading.ManufactureId);
+				}
+				else
+				{
+					logger.LogError($"Invalid reading on topic {topic} message={message}");
+				}
 			}
-			else if(reading.Uuid.HasValue)
+			catch(JsonException exception)
 			{
-				await service.AddSensorEntryAsync(reading.SensorType, DateTimeOffset.Now, reading.Values, reading.Uuid.Value);
-			}
-			else if(!string.IsNullOrWhiteSpace(reading.Manufacture) && !string.IsNullOrWhiteSpace(reading.ManufactureId))
-			{
-				await service.AddSensorEntryAsync(reading.SensorType, DateTimeOffset.Now,
-					reading.Values, reading.Manufacture, reading.ManufactureId);
-			}
-			else
-			{
-				logger.LogError($"Invalid reading on topic {topic} message={message}");
+				logger.LogError(exception, "JsonException from Message. Topic={0}", topic);
 			}
 		}
 	}

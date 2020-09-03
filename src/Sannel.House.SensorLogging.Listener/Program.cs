@@ -24,8 +24,11 @@ using Sannel.House.SensorLogging.Services;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+
+[assembly: InternalsVisibleTo("Sannel.House.SensorLogging.Tests")]
 
 namespace Sannel.House.SensorLogging.Listener
 {

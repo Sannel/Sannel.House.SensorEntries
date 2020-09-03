@@ -23,31 +23,33 @@ namespace Sannel.House.SensorLogging.Interfaces
 		/// Adds the sensor entry asynchronous.
 		/// </summary>
 		/// <param name="sensorType">Type of the sensor.</param>
-		/// <param name="creationDate">The creation date.</param>
 		/// <param name="values">The values.</param>
 		/// <param name="deviceMacAddress">The device mac address.</param>
 		/// <returns></returns>
-		Task AddSensorEntryAsync(SensorTypes sensorType, DateTimeOffset creationDate, Dictionary<string, double> values, long deviceMacAddress);
+		Task AddSensorEntryAsync(SensorTypes sensorType, Dictionary<string, double> values, long deviceMacAddress);
 
 		/// <summary>
 		/// Adds the sensor entry asynchronous.
 		/// </summary>
 		/// <param name="sensorType">Type of the sensor.</param>
-		/// <param name="creationDate">The creation date.</param>
 		/// <param name="values">The values.</param>
 		/// <param name="deviceUuid">The device UUID.</param>
 		/// <returns></returns>
-		Task AddSensorEntryAsync(SensorTypes sensorType, DateTimeOffset creationDate, Dictionary<string, double> values, Guid deviceUuid);
+		Task AddSensorEntryAsync(SensorTypes sensorType, Dictionary<string, double> values, Guid deviceUuid);
 		/// <summary>
 		/// Adds the sensor entry asynchronous.
 		/// </summary>
 		/// <param name="sensorType">Type of the sensor.</param>
-		/// <param name="creationDate">The creation date.</param>
 		/// <param name="values">The values.</param>
 		/// <param name="manufacture">The manufacture.</param>
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
-		Task AddSensorEntryAsync(SensorTypes sensorType, DateTimeOffset creationDate, Dictionary<string, double> values, string manufacture, string manufactureId);
+		Task AddSensorEntryAsync(SensorTypes sensorType, Dictionary<string, double> values, string manufacture, string manufactureId);
+		/// <summary></summary>
+		/// <param name="sensorType"></param>
+		/// <param name="values"></param>
+		/// <param name="manufacture"></param>
+		/// <param name="manufactureId"></param>
 
 		/// <summary>
 		/// Updates the device information from message asynchronous.

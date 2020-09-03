@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Sannel.House.SensorLogging.Listener
 {
@@ -42,9 +43,17 @@ namespace Sannel.House.SensorLogging.Listener
 		}
 
 		public async void Message(string topic, string message)
+			=> await MessageAsync(topic, message);
+
+		internal async Task MessageAsync(string topic, string message)
 		{
 			try
 			{
+				if(string.IsNullOrWhiteSpace(message))
+				{
+					return;
+				}
+
 				var options = new JsonSerializerOptions()
 				{
 					PropertyNameCaseInsensitive = true
@@ -58,9 +67,9 @@ namespace Sannel.House.SensorLogging.Listener
 					await service.UpdateDeviceInformationFromMessageAsync(dmessage);
 				}
 			}
-			catch(Exception ex)
+			catch(JsonException ex)
 			{
-				logger.LogError(ex, "Error reading device message");
+				logger.LogError(ex, "Error reading device message on topic {0}", topic);
 			}
 		}
 	}

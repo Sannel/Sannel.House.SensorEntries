@@ -20,6 +20,7 @@ namespace Sannel.House.SensorLogging.ViewModel
 	public class MacAddressReading : ReadingBase
 	{
 		[Required]
+		[Range(0, long.MaxValue)]
 		public long MacAddress { get; set; }
 	}
 }
