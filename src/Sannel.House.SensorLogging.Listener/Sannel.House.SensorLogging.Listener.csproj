@@ -1,0 +1,58 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+    <PackageReference Include="Sannel.House.Base.Data" Version="0.9.420-beta" />
+    <PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.473-beta" />
+    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.466-beta" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.csproj" />
+    <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.Sqlite\Sannel.House.SensorLogging.Data.Migrations.Sqlite.csproj" />
+    <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.SqlServer\Sannel.House.SensorLogging.Data.Migrations.SqlServer.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Repositories\Sannel.House.SensorLogging.Repositories.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Services\Sannel.House.SensorLogging.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="app_config\appsettings.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

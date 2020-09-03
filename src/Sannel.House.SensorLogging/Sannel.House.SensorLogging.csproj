@@ -1,34 +1,31 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <UserSecretsId>0c734c75-d2e8-45d4-8349-920c1752f11a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.9" />
-    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="1.6.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NSwag.AspNetCore" Version="12.3.1" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.2.0" />
-    <PackageReference Include="Sannel.House.Data" Version="0.5.184-beta" />
-    <PackageReference Include="Sannel.House.Devices.Client" Version="0.5.226-beta" />
-    <PackageReference Include="Sannel.House.Models" Version="0.5.184-beta" />
-    <PackageReference Include="Sannel.House.Sensor" Version="0.5.184-beta" />
-    <PackageReference Include="Sannel.House.Web" Version="0.5.184-beta" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.7" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.7.0" />
+    <PackageReference Include="Sannel.House.Base.Data" Version="0.9.420-beta" />
+    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.415-beta" />
+    <PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.473-beta" />
+    <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.435-beta" />
+    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.466-beta" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+    <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.MySql\Sannel.House.SensorLogging.Data.Migrations.MySql.csproj" />
     <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL\Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.csproj" />
     <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.Sqlite\Sannel.House.SensorLogging.Data.Migrations.Sqlite.csproj" />
     <ProjectReference Include="..\Migrations\Sannel.House.SensorLogging.Data.Migrations.SqlServer\Sannel.House.SensorLogging.Data.Migrations.SqlServer.csproj" />
@@ -36,6 +33,7 @@
     <ProjectReference Include="..\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj" />
     <ProjectReference Include="..\Sannel.House.SensorLogging.Repositories\Sannel.House.SensorLogging.Repositories.csproj" />
+    <ProjectReference Include="..\Sannel.House.SensorLogging.Services\Sannel.House.SensorLogging.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

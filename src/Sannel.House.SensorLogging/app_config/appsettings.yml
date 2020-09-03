@@ -1,14 +1,20 @@
 Db:
-  Provider: sqlite # sqlite, mysql, sqlserver, postgresql
+  Provider: sqlite # sqlite, sqlserver, postgresql
   ConnectionString: "Data Source=app_data/data.db"
 
-Client:
-  DevicesBaseUrl: "http://gateway"
-
 Authentication:
-  AuthorityUrl: "http://house.dev.local"
+  AuthorityUrl: "http://users.localtest.me:8181"
+  Schema: houseapi
   ApiName: houseapi
+  ApiSecret: "@KiHRt7Uj0zssPlg2YvffMsUEd"
   DisableRequireHttpsMetadata: true
+MQTT:
+  Server: mqtt.localtest.me
+  DefaultTopic: local/house/sensor/reading
+  Port: 1883
+  NewReadingTopic: local/house/sensor/reading
+  UnknownDeviceTopic: local/house/devices/unknown
+
 
 Logging:
   LogLevel:

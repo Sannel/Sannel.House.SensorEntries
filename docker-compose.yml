@@ -2,59 +2,82 @@ version: '3.6'
 
 services:
   gateway:
-    image: ${DOCKER_REGISTRY}house.gateway:beta
+    image: sannel/house.gateway:beta
     networks:
       housenet:
         aliases:
-          - "gateway.house.dev.local"
+          - "gateway.localtest.me"
     ports:
-      - "80:80"
-      - "443:443"
-    user: "${USER}"
+      - "8180:8080"
+      - "8443:443"
+    volumes:
+    - "./RunData/gateway/app_config/:/app/app_config/"
+    - "./RunData/gateway/app_data:/app/app_data/"
     depends_on:
       - users
-      - devices
 
   users:
-    image: ${DOCKER_REGISTRY}house.users:beta
+    image: sannel/house.users:beta
     networks: 
       housenet:
         aliases:
-          - "house.dev.local"
-    user: "${USER}"
+          - "users.localtest.me"
     ports:
-      - "8082:80"
+      - "8181:8181"
+    volumes:
+    - "./RunData/users/app_config/appsettings.yml:/app/app_config/appsettings.yml"
+    - "./RunData/users/app_data:/app/app_data/"
 
   devices:
-    image: ${DOCKER_REGISTRY}house.devices:beta
-    networks:
+    image: sannel/house.devices:beta
+    networks: 
       housenet:
         aliases:
-          - "devices.house.dev.local"
-    user: "${USER}"
+          - "devices.localtest.me"
     ports:
-      - "8080:80"
-    depends_on:
-      - users
+      - "8183:8080"
+    volumes:
+    - "./RunData/devices/app_config/appsettings.yml:/app/app_config/appsettings.yml"
+    - "./RunData/devices/app_data:/app/app_data/"
 
   sensorlogging:
-    image: ${DOCKER_REGISTRY}${ImageName}:${BuildType}-${SANNEL_VERSION}-${SANNEL_ARCH}
+    image: sannel/sensorlogging
     build:
       context: .
       dockerfile: src/Sannel.House.SensorLogging/Dockerfile
-      args:
-        USER: "${USER}"
     networks:
       housenet:
         aliases:
-          - "sensorlogging.house.dev.local"
-    user: "${USER}"
+          - "sensorlogging.localtest.me"
     ports:
-      - "8084:80"
+      - "8182:8080"
+    volumes:
+      - "./src/Sannel.House.SensorLogging/app_config:/app/app_config"
+      - "./src/Sannel.House.SensorLogging/app_data:/app/app_data"
     depends_on:
-      - users
-      - devices
-      - gateway
+      - mqtt
+
+  sensorloggingListener:
+    image: sannel/sensorlogginglistener
+    build:
+      context: .
+      dockerfile: src/Sannel.House.SensorLogging.Listener/Dockerfile
+    networks:
+      housenet:
+    volumes:
+      - "./src/Sannel.House.SensorLogging.Listener/app_config:/app/app_config"
+      - "./src/Sannel.House.SensorLogging/app_data:/app/app_data"
+    depends_on:
+      - mqtt
+
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+    - "8883:1883"
+    networks: 
+      housenet:
+        aliases:
+          - "mqtt.localtest.me"
 
 
 networks:

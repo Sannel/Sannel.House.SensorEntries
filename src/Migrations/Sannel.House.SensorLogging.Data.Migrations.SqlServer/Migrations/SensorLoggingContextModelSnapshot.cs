@@ -15,30 +15,101 @@ namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Sannel.House.SensorLogging.Models.Device", b =>
+                {
+                    b.Property<Guid>("LocalDeviceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("DeviceId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("MacAddress")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Manufacture")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ManufactureId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("Uuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("LocalDeviceId");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("MacAddress");
+
+                    b.HasIndex("Uuid");
+
+                    b.HasIndex("Manufacture", "ManufactureId");
+
+                    b.ToTable("Devices");
+                });
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorEntry", b =>
                 {
                     b.Property<Guid>("SensorEntryId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("CreationDate");
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("DeviceId");
+                    b.Property<Guid>("LocalDeviceId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SensorType");
-
-                    b.Property<string>("Values");
+                    b.Property<int>("SensorType")
+                        .HasColumnType("int");
 
                     b.HasKey("SensorEntryId");
 
-                    b.HasIndex("DeviceId");
+                    b.HasIndex("LocalDeviceId");
 
                     b.HasIndex("SensorType");
 
                     b.ToTable("SensorEntries");
+                });
+
+            modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
+                {
+                    b.Property<Guid?>("SensorReadingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<Guid>("SensorEntryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("float");
+
+                    b.HasKey("SensorReadingId");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("SensorEntryId");
+
+                    b.ToTable("SensorReading");
+                });
+
+            modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
+                {
+                    b.HasOne("Sannel.House.SensorLogging.Models.SensorEntry", "SensorEntry")
+                        .WithMany("Values")
+                        .HasForeignKey("SensorEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,4 @@
-/* Copyright 2019 Sannel Software, L.L.C.
+/* Copyright 2019-2020 Sannel Software, L.L.C.
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -8,14 +8,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Sannel.House.Devices.Client;
-using Sannel.House.Models;
 using Sannel.House.SensorLogging.Controllers;
 using Sannel.House.SensorLogging.Interfaces;
 using Sannel.House.SensorLogging.ViewModel;
+using Sannel.House.SensorLogging.Services;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -27,186 +27,164 @@ using Moq.Protected;
 using System.Threading;
 using Newtonsoft.Json;
 using Sannel.House.SensorLogging.Models;
-using Results_Device = Sannel.House.Client.Results<Sannel.House.Devices.Client.Device>;
+using Sannel.House.Base.Models;
+using Sannel.House.Base.Sensor;
 
 namespace Sannel.House.SensorLogging.Tests.Controllers
 {
 	public class SensorLoggingControllerTests : BaseTest
 	{
-		private (Mock<ISensorRepository> repo,
-			Mock<IHttpClientFactory> factory,
-			Mock<DevicesClient> client)
-			getCommon()
-		{
-			var repo = new Mock<ISensorRepository>();
-			var factory = new Mock<IHttpClientFactory>();
-			var messageHandler = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-			var logger = new Mock<Microsoft.Extensions.Logging.ILogger<DevicesClient>>();
-
-
-			factory.Setup(i => i.CreateClient(nameof(Sannel.House.Devices.Client.DevicesClient)))
-				.Returns(() => new HttpClient(messageHandler.Object));
-
-			var client = new Mock<DevicesClient>(factory.Object, new Uri("http://gateway.dev.local"), logger.Object);
-
-			return (repo, factory, client);
-
-		}
-
-
-
 		[Fact]
-		public async Task PostTestException()
+		public async Task AddWithMacAddressTest()
 		{
-			var (repo, factory, client) = getCommon();
-			var logger = this.CreateLogger<SensorLoggingController>();
-			var controller = new SensorLoggingController(repo.Object, client.Object, logger);
+			var service = new Mock<ISensorService>();
+			var controller = new SensorLoggingController(service.Object, 
+				CreateLogger<SensorLoggingController>());
 
-			await Assert.ThrowsAsync<ArgumentNullException>(() => controller.Post(null));
-
-		}
-
-
-		[Fact]
-		public async Task PostModelError()
-		{
-			var (repo, factory, client) = getCommon();
-			var logger = this.CreateLogger<SensorLoggingController>();
-			var controller = new SensorLoggingController(repo.Object, client.Object, logger);
-
-			// Model State Error
-			controller.ModelState.AddModelError("error", "errorMessage");
-
-			var sensorReading = new SensorReading
+			var model = new MacAddressReading()
 			{
-				DeviceId = 2,
-				CreationDate = DateTime.Now,
-				SensorType = Sensor.SensorTypes.Pressure,
+				MacAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue),
+				SensorType = Base.Sensor.SensorTypes.Pressure,
 				Values = new Dictionary<string, double>()
 				{
-					{ "current", 30.2d }
+					{"Value1", random.NextDouble() },
+					{"Value2", random.NextDouble() }
 				}
 			};
 
-			var result = await controller.Post(sensorReading);
-			var bror = Assert.IsAssignableFrom<BadRequestObjectResult>(result.Result);
-			Assert.Equal(400, bror.StatusCode);
-			var v = Assert.IsAssignableFrom<ErrorResponseModel>(bror.Value);
-			Assert.NotNull(v);
-			Assert.Equal("Invalid Model", v.Title);
-			Assert.Single(v.Errors);
-			var e = v.Errors.First();
-			Assert.Equal("error", e.Key);
-			Assert.Equal("errorMessage", string.Join(" ", e.Value));
+			var addSensorEntryCallback = 0;
+			service.Setup(i => i.AddSensorEntryAsync(It.IsAny<SensorTypes>(), It.IsAny<Dictionary<string, double>>(),
+				It.IsAny<long>()))
+				.Callback((SensorTypes type, Dictionary<string, double> values, long macAddress) =>
+				{
+					addSensorEntryCallback++;
+					Assert.Equal(model.SensorType, type);
+					Assert.Equal(model.MacAddress, macAddress);
+					Assert.Equal(model.Values.Count, values.Count);
+
+					foreach(var kv in values)
+					{
+						Assert.True(model.Values.ContainsKey(kv.Key));
+						Assert.Equal(model.Values[kv.Key], kv.Value);
+					}
+				});
+
+			var result = await controller.AddWithMacAddress(model);
+			var okObject = Assert.IsAssignableFrom<OkObjectResult>(result);
+			Assert.Equal(200, okObject.StatusCode);
+			var response = Assert.IsAssignableFrom<ResponseModel>(okObject.Value);
+			Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+
+			controller.ModelState.AddModelError("test", "test");
+			result = await controller.AddWithMacAddress(null);
+			var badRequest = Assert.IsAssignableFrom<BadRequestObjectResult>(result);
+			Assert.Equal(400, badRequest.StatusCode);
+			var error = Assert.IsAssignableFrom<ErrorResponseModel>(badRequest.Value);
+			Assert.Equal("Invalid Model", error.Title);
+			Assert.Equal(1, addSensorEntryCallback);
 		}
 
-		[Theory]
-		[ClassData(typeof(SensorReadingsGenerator))]
-		public async Task PostTest(SensorReading sensorReading)
+		[Fact]
+		public async Task AddWithUuidTest()
 		{
-			var (repo, factory, client) = getCommon();
-			var logger = this.CreateLogger<SensorLoggingController>();
-			var controller = new SensorLoggingController(repo.Object, client.Object, logger);
+			var service = new Mock<ISensorService>();
+			var controller = new SensorLoggingController(service.Object, 
+				CreateLogger<SensorLoggingController>());
 
-			var deviceId = sensorReading.DeviceId ?? 340;
-
-			Func<Results_Device> ret = () => new Results_Device()
+			var model = new UuidReading()
 			{
-				Success = false,
-				Status = 200,
-				Data = new Device()
+				Uuid = Guid.NewGuid(),
+				SensorType = Base.Sensor.SensorTypes.Lux,
+				Values = new Dictionary<string, double>()
 				{
-					DeviceId = deviceId
+					{"Value1", random.NextDouble() },
+					{"Value2", random.NextDouble() }
 				}
 			};
 
-			if (sensorReading.DeviceId.HasValue)
-			{
-				client
-					.Setup(i => i.GetDeviceAsync(sensorReading.DeviceId.Value))
-					.ReturnsAsync(ret);
-			}
-			else if(sensorReading.DeviceMacAddress.HasValue)
-			{
-				client
-					.Setup(i => i.GetByMacAddressAsync(sensorReading.DeviceMacAddress.Value))
-					.ReturnsAsync(ret);
-			}
-			else if(sensorReading.DeviceUuid.HasValue)
-			{
-				client.Setup(i => i.GetByUuidAsync(sensorReading.DeviceUuid.Value))
-					.ReturnsAsync(ret);
-			}
-			else if(!string.IsNullOrWhiteSpace(sensorReading.Manufacture) && !string.IsNullOrWhiteSpace(sensorReading.ManufactureId))
-			{
-				client
-					.Setup(i => i.GetByManufactureIdAsync(sensorReading.Manufacture, sensorReading.ManufactureId))
-					.ReturnsAsync(ret);
-			}
-
-			repo.Setup(i => i.AddSensorEntryAsync(It.IsAny<SensorEntry>()))
-				.Callback<SensorEntry>(i =>
-			{
-				Assert.NotNull(i);
-				Assert.Equal(sensorReading.CreationDate, i.CreationDate);
-				Assert.Equal(sensorReading.SensorType, i.SensorType);
-				Assert.Equal(sensorReading.Values.Count, i.Values.Count);
-
-				foreach(var key in sensorReading.Values.Keys)
+			var addSensorEntryCallback = 0;
+			service.Setup(i => i.AddSensorEntryAsync(It.IsAny<SensorTypes>(), It.IsAny<Dictionary<string, double>>(),
+				It.IsAny<Guid>()))
+				.Callback((SensorTypes type, Dictionary<string, double> values, Guid uuid) =>
 				{
-					Assert.True(i.Values.ContainsKey(key));
-					Assert.Equal(sensorReading.Values[key], i.Values[key]);
-				}
-			}).Returns(Task.Run(()=> { }));
+					addSensorEntryCallback++;
+					Assert.Equal(model.SensorType, type);
+					Assert.Equal(model.Uuid, uuid);
+					Assert.Equal(model.Values.Count, values.Count);
 
-			var result = await controller.Post(sensorReading);
-			var okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-			Assert.Equal(200, okor.StatusCode);
-			var responseModel = Assert.IsAssignableFrom<Sannel.House.Models.ResponseModel<Guid>>(okor.Value);
-			Assert.NotNull(responseModel);
-			Assert.NotEqual(Guid.Empty, responseModel.Data);
+					foreach(var kv in values)
+					{
+						Assert.True(model.Values.ContainsKey(kv.Key));
+						Assert.Equal(model.Values[kv.Key], kv.Value);
+					}
+				});
 
-			ret = () => new Results_Device()
-			{
-				Success = true,
-				Status = 200,
-				Data = new Device()
-				{
-					DeviceId = deviceId
-				}
-			};
+			var result = await controller.AddWithUuid(model);
+			var okObject = Assert.IsAssignableFrom<OkObjectResult>(result);
+			Assert.Equal(200, okObject.StatusCode);
+			var response = Assert.IsAssignableFrom<ResponseModel>(okObject.Value);
+			Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
 
-			if (sensorReading.DeviceId.HasValue)
-			{
-				client
-					.Setup(i => i.GetDeviceAsync(sensorReading.DeviceId.Value))
-					.ReturnsAsync(ret);
-			}
-			else if(sensorReading.DeviceMacAddress.HasValue)
-			{
-				client
-					.Setup(i => i.GetByMacAddressAsync(sensorReading.DeviceMacAddress.Value))
-					.ReturnsAsync(ret);
-			}
-			else if(sensorReading.DeviceUuid.HasValue)
-			{
-				client.Setup(i => i.GetByUuidAsync(sensorReading.DeviceUuid.Value))
-					.ReturnsAsync(ret);
-			}
-			else if(!string.IsNullOrWhiteSpace(sensorReading.Manufacture) && !string.IsNullOrWhiteSpace(sensorReading.ManufactureId))
-			{
-				client
-					.Setup(i => i.GetByManufactureIdAsync(sensorReading.Manufacture, sensorReading.ManufactureId))
-					.ReturnsAsync(ret);
-			}
-
-			result = await controller.Post(sensorReading);
-			okor = Assert.IsAssignableFrom<OkObjectResult>(result.Result);
-			Assert.Equal(200, okor.StatusCode);
-			responseModel = Assert.IsAssignableFrom<Sannel.House.Models.ResponseModel<Guid>>(okor.Value);
-			Assert.NotNull(responseModel);
-			Assert.NotEqual(Guid.Empty, responseModel.Data);
+			controller.ModelState.AddModelError("test", "test");
+			result = await controller.AddWithMacAddress(null);
+			var badRequest = Assert.IsAssignableFrom<BadRequestObjectResult>(result);
+			Assert.Equal(400, badRequest.StatusCode);
+			var error = Assert.IsAssignableFrom<ErrorResponseModel>(badRequest.Value);
+			Assert.Equal("Invalid Model", error.Title);
+			Assert.Equal(1, addSensorEntryCallback);
 		}
 
+		[Fact]
+		public async Task AddWithManufactureTest()
+		{
+			var service = new Mock<ISensorService>();
+			var controller = new SensorLoggingController(service.Object, 
+				CreateLogger<SensorLoggingController>());
+
+			var model = new ManufactureIdReading()
+			{
+				Manufacture = Guid.NewGuid().ToString(),
+				ManufactureId = Guid.NewGuid().ToString(),
+				SensorType = Base.Sensor.SensorTypes.Rain,
+				Values = new Dictionary<string, double>()
+				{
+					{"Value1", random.NextDouble() },
+					{"Value2", random.NextDouble() }
+				}
+			};
+
+			var addSensorEntryCallback = 0;
+			service.Setup(i => i.AddSensorEntryAsync(It.IsAny<SensorTypes>(), It.IsAny<Dictionary<string, double>>(),
+				It.IsAny<string>(),
+				It.IsAny<string>()))
+				.Callback((SensorTypes type, Dictionary<string, double> values, string manufacture, string manufactureId) =>
+				{
+					addSensorEntryCallback++;
+					Assert.Equal(model.SensorType, type);
+					Assert.Equal(model.Manufacture, manufacture);
+					Assert.Equal(model.ManufactureId, manufactureId);
+					Assert.Equal(model.Values.Count, values.Count);
+
+					foreach(var kv in values)
+					{
+						Assert.True(model.Values.ContainsKey(kv.Key));
+						Assert.Equal(model.Values[kv.Key], kv.Value);
+					}
+				});
+
+			var result = await controller.AddWithManufactureId(model);
+			var okObject = Assert.IsAssignableFrom<OkObjectResult>(result);
+			Assert.Equal(200, okObject.StatusCode);
+			var response = Assert.IsAssignableFrom<ResponseModel>(okObject.Value);
+			Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+
+			controller.ModelState.AddModelError("test", "test");
+			result = await controller.AddWithMacAddress(null);
+			var badRequest = Assert.IsAssignableFrom<BadRequestObjectResult>(result);
+			Assert.Equal(400, badRequest.StatusCode);
+			var error = Assert.IsAssignableFrom<ErrorResponseModel>(badRequest.Value);
+			Assert.Equal("Invalid Model", error.Title);
+			Assert.Equal(1, addSensorEntryCallback);
+		}
 	}
 }
