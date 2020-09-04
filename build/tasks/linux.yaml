@@ -88,7 +88,10 @@ jobs:
         New-Item -Type Directory -Force $(Build.StagingDirectory)/$(project)/app_data/
         New-Item -Type File -Force $(Build.StagingDirectory)/$(project)/app_data/.hold
         
-        copy-item -Force -Verbose build/linux-x64/Dockerfile $(Build.StagingDirectory)/
+        $dockerfile = [string]::Join([Environment]::NewLine, (Get-Content build/linux-x64/Dockerfile))
+        $dockerfile = $dockerfile -replace "\`$\{project\}","$(project)"
+
+        Set-Content $(Build.StagingDirectory)/Dockerfile -Value $dockerfile
       displayName: 'Prepare Items'
     - task: Docker@2
       displayName: 'Build an image x64'
@@ -99,7 +102,7 @@ jobs:
         Dockerfile: '$(Build.StagingDirectory)/Dockerfile'
         buildContext: '$(Build.StagingDirectory)'
         tags: '$(imageTag)-linux-x64'
-        arguments: '--build-arg tag=$(tagVersion) --build-arg project=$(project)'
+        arguments: '--build-arg tag=$(tagVersion)'
     - powershell: |
         $img = "$(dockerRepositoryRoot)/$(imageName):$(imageTag)".ToLower()
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.x64.tar "${img}-linux-x64"

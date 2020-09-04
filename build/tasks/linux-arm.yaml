@@ -76,7 +76,10 @@ jobs:
         New-Item -Type Directory -Force $(Build.StagingDirectory)/$(project)/app_data/
         New-Item -Type File -Force $(Build.StagingDirectory)/$(project)/app_data/.hold
         
-        copy-item -Force -Verbose build/linux-$(arch)/Dockerfile $(Build.StagingDirectory)/
+        $dockerfile = [string]::Join([Environment]::NewLine, (Get-Content build/linux-$(arch)/Dockerfile))
+        $dockerfile = $dockerfile -replace "\`$\{project\}","$(project)"
+
+        Set-Content $(Build.StagingDirectory)/Dockerfile -Value $dockerfile
       displayName: 'Prepare Items'
     - task: Docker@1
       displayName: 'Run an image '
@@ -95,7 +98,7 @@ jobs:
         Dockerfile: '$(Build.StagingDirectory)/Dockerfile'
         buildContext: '$(Build.StagingDirectory)'
         tags: '$(imageTag)-linux-$(archLong)'
-        arguments: '--build-arg tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong) --build-arg project=$(project)'
+        arguments: '--build-arg tag=$(tagVersion)-$(tagCodeName)-slim-$(archLong)'
     - powershell: |
         $img = "$(dockerRepositoryRoot)/$(imageName):$(imageTag)".ToLower()
         $targetFile = "$(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.$(archLong).tar"

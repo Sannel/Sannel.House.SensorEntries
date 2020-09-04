@@ -1,5 +1,4 @@
 ARG tag=3.1
-ARG project=Sannel.House.SensorLogging
 FROM mcr.microsoft.com/dotnet/core/runtime:${tag} AS base
 WORKDIR /app
 EXPOSE 8080
@@ -9,7 +8,7 @@ COPY ${project}/ .
 RUN ln -s  /var/run/secrets/kubernetes.io/serviceaccount/ca.crt /etc/ssl/certs/kubernetes.pem \
     && mkdir /app/app_data \
     && groupadd -g 1200 house \
-    && useradd -m house -g house -u 1100 \
+    && useradd -m house -g house -u 1200 \
     && chown -R house:house /app \
     && rm -f /usr/bin/qemu-aarch64-static
 USER 1200
