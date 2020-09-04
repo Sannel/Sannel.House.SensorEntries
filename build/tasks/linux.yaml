@@ -94,14 +94,14 @@ jobs:
       displayName: 'Build an image x64'
       inputs:
         containerRegistry: 'Docker Hub'
-        repository: $(imageName)
+        repository: $(dockerRepositoryRoot)/$(imageName)
         command: 'build'
         Dockerfile: '$(Build.StagingDirectory)/Dockerfile'
         buildContext: '$(Build.StagingDirectory)'
         tags: '$(imageTag)-linux-x64'
         arguments: '--build-arg tag=$(tagVersion) --build-arg project=$(project)'
     - powershell: |
-        $img = "$(imageName):$(imageTag)".ToLower()
+        $img = "$(dockerRepositoryRoot)/$(imageName):$(imageTag)".ToLower()
         docker save -o $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.x64.tar "${img}-linux-x64"
         bzip2 -9 $(Build.StagingDirectory)/$(dockerRepositoryRoot).$(imageName).linux.x64.tar
       displayName: 'export image'
