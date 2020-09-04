@@ -74,7 +74,7 @@ jobs:
         publishTestResults: true
       condition: eq(variables['hasTests'], 'true')
     - task: CopyFiles@2
-      displayName: 'Copy Files to: $(Build.StagingDirectory)/$(projectFolder)/app_config/'
+      displayName: 'Copy Files to: $(Build.StagingDirectory)/$(project)/app_config/'
       inputs:
         SourceFolder: 'src/$(project)/app_config'
         Contents: |
