@@ -5,7 +5,6 @@ EXPOSE 8080
 EXPOSE 8443
 COPY ${project}/ .
 RUN ln -s  /var/run/secrets/kubernetes.io/serviceaccount/ca.crt /etc/ssl/certs/kubernetes.pem \
-    && mkdir /app/app_data \
     && groupadd -g 1200 house \
     && useradd -m house -g house -u 1200 \
     && chown -R house:house /app
