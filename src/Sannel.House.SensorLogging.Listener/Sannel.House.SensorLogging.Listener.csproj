@@ -32,7 +32,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
     <PackageReference Include="Sannel.House.Base.Data" Version="0.9.524-beta" />
     <PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.517-beta" />
-    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.466-beta" />
+    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.527-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.7" />

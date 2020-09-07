@@ -20,7 +20,7 @@
     <PackageReference Include="Sannel.House.Base.Models" Version="0.9.521-beta" />
     <PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.517-beta" />
     <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.515-beta" />
-    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.466-beta" />
+    <PackageReference Include="Sannel.House.Base.Web" Version="0.9.527-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
