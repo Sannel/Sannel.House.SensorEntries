@@ -141,8 +141,6 @@ namespace Sannel.House.SensorLogging
 				//app.UseHsts();
 			}
 
-			app.UseHouseHealthChecks("/health");
-
 			app.UseRouting();
 
 			app.UseAuthentication();
@@ -158,6 +156,7 @@ namespace Sannel.House.SensorLogging
 			app.UseEndpoints(i =>
 			{
 				i.MapControllers();
+				i.MapHouseHealthChecks("/health");
 			});
 
 		}

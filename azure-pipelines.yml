@@ -11,17 +11,21 @@ variables:
   imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.SensorLogging
   listenerProjectFolder: Sannel.House.SensorLogging.Listener
-  mainProjectPath: src/$(projectFolder)/$(projectFolder).csproj
-  mainConfigPath: src/$(projectFolder)/app_config
   tagVersion: 3.1
   tagCodeName: buster
-  hasClient: false
   hasTests: true
-  disableLinux: false
-  disableArm64: false
+  Major: 0
+  Minor: 9
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: Sannel/Sannel.House.BuildScripts
+      endpoint: Sannel
 
 jobs:
-- template: build/tasks/linux-arm.yaml
+- template: tasks/docker/linux-arm.yaml@templates
   parameters:
     arch: arm32
     archLong: arm32v7
@@ -31,7 +35,7 @@ jobs:
     imageName: $(loggerImageName)
     jobName: sensorlogging
 
-- template: build/tasks/linux-arm.yaml
+- template: tasks/docker/linux-arm.yaml@templates
   parameters:
     arch: arm32
     archLong: arm32v7
@@ -42,7 +46,7 @@ jobs:
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
 
-- template: build/tasks/linux-arm.yaml
+- template: tasks/docker/linux-arm.yaml@templates
   parameters:
     arch: arm64
     archLong: arm64v8
@@ -51,7 +55,7 @@ jobs:
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: sensorlogging
 
-- template: build/tasks/linux-arm.yaml
+- template: tasks/docker/linux-arm.yaml@templates
   parameters:
     arch: arm64
     archLong: arm64v8
@@ -60,14 +64,14 @@ jobs:
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
 
-- template: build/tasks/linux.yaml
+- template: tasks/docker/linux-x64.yaml@templates
   parameters:
     project: $(projectFolder)
     imageName: $(loggerImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: sensorlogging
 
-- template: build/tasks/linux.yaml
+- template: tasks/docker/linux-x64.yaml@templates
   parameters:
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)

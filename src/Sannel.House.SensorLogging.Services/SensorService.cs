@@ -70,6 +70,11 @@ namespace Sannel.House.SensorLogging.Services
 			var device = await repository.GetDeviceByMacAddressAsync(deviceMacAddress);
 			if(device is null)
 			{
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Unknown Device with MacAddress {MacAddress} Adding", deviceMacAddress);
+				}
+
 				device = await repository.AddDeviceByMacAddressAsync(deviceMacAddress);
 			}
 
@@ -81,6 +86,11 @@ namespace Sannel.House.SensorLogging.Services
 
 			if(device.DeviceId is null)
 			{
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Unknown DeviceId for MacAddress = {MacAddress}", device.MacAddress);
+				}
+
 				mqttClient.Publish(unknownDeviceTopic,
 					new UnknownDeviceMessage()
 					{
@@ -91,6 +101,14 @@ namespace Sannel.House.SensorLogging.Services
 			var result = await repository.AddSensorEntryAsync(sensorType, device.LocalDeviceId, values);
 			if(result != null)
 			{
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Topic = {Topic} SensorType = {SensorType} CreationDate = {CreationDate} LocalDeviceId = {LocalDeviceId}",
+						newReadingTopic,
+						result.SensorType,
+						result.CreationDate,
+						result.LocalDeviceId);
+				}
 				mqttClient.Publish(newReadingTopic,
 					new NewReadingMessage()
 					{
@@ -99,6 +117,10 @@ namespace Sannel.House.SensorLogging.Services
 						CreationDate = result.CreationDate,
 						Values = result.Values.ToDictionary(i => i.Name, i => i.Value)
 					});
+			}
+			else
+			{
+				logger.LogWarning("Results is null");
 			}
 		}
 
@@ -114,8 +136,12 @@ namespace Sannel.House.SensorLogging.Services
 			var device = await repository.GetDeviceByUuidAsync(deviceUuid);
 			if(device is null)
 			{
-				device = await repository.AddDeviceByUuidAsync(deviceUuid);
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Unknown Device with Uuid {deviceUuid} Adding", deviceUuid);
+				}
 
+				device = await repository.AddDeviceByUuidAsync(deviceUuid);
 			}
 
 			if(device is null)
@@ -126,6 +152,11 @@ namespace Sannel.House.SensorLogging.Services
 
 			if(device.DeviceId is null)
 			{
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Unknown DeviceId for Uuid = {deviceUuid}", device.Uuid);
+				}
+
 				mqttClient.Publish(unknownDeviceTopic,
 					new UnknownDeviceMessage()
 					{
@@ -136,6 +167,15 @@ namespace Sannel.House.SensorLogging.Services
 			var result = await repository.AddSensorEntryAsync(sensorType, device.LocalDeviceId, values);
 			if(result != null)
 			{
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Topic = {Topic} SensorType = {SensorType} CreationDate = {CreationDate} LocalDeviceId = {LocalDeviceId}",
+						newReadingTopic,
+						result.SensorType,
+						result.CreationDate,
+						result.LocalDeviceId);
+				}
+
 				mqttClient.Publish(newReadingTopic,
 					new NewReadingMessage()
 					{
@@ -144,6 +184,10 @@ namespace Sannel.House.SensorLogging.Services
 						CreationDate = result.CreationDate,
 						Values = result.Values.ToDictionary(i => i.Name, i => i.Value)
 					});
+			}
+			else
+			{
+				logger.LogWarning("Results is null");
 			}
 		}
 
@@ -160,8 +204,12 @@ namespace Sannel.House.SensorLogging.Services
 			var device = await repository.GetDeviceByManufactureIdAsync(manufacture, manufactureId);
 			if(device is null)
 			{
-				device = await repository.AddDeviceByManufactureIdAsync(manufacture, manufactureId);
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Unknown Device with Manufacture {manufacture} ManufactureId {ManufactureId} Adding", manufacture, manufactureId);
+				}
 
+				device = await repository.AddDeviceByManufactureIdAsync(manufacture, manufactureId);
 			}
 
 			if(device is null)
@@ -172,6 +220,11 @@ namespace Sannel.House.SensorLogging.Services
 
 			if(device.DeviceId is null)
 			{
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Unknown DeviceId for Manufacture = {manufacture} ManufactureId = {manufactureId", device.Manufacture, device.ManufactureId);
+				}
+
 				mqttClient.Publish(unknownDeviceTopic,
 					new UnknownDeviceMessage()
 					{
@@ -183,6 +236,15 @@ namespace Sannel.House.SensorLogging.Services
 			var result = await repository.AddSensorEntryAsync(sensorType, device.LocalDeviceId, values);
 			if(result != null)
 			{
+				if(logger.IsEnabled(LogLevel.Debug))
+				{
+					logger.LogDebug("Topic = {Topic} SensorType = {SensorType} CreationDate = {CreationDate} LocalDeviceId = {LocalDeviceId}",
+						newReadingTopic,
+						result.SensorType,
+						result.CreationDate,
+						result.LocalDeviceId);
+				}
+
 				mqttClient.Publish(newReadingTopic,
 					new NewReadingMessage()
 					{
@@ -191,6 +253,10 @@ namespace Sannel.House.SensorLogging.Services
 						CreationDate = result.CreationDate,
 						Values = result.Values.ToDictionary(i => i.Name, i => i.Value)
 					});
+			}
+			else
+			{
+				logger.LogWarning("Results is null");
 			}
 		}
 

@@ -33,7 +33,7 @@ namespace Sannel.House.SensorLogging.Listener
 		{
 			this.service = service ?? throw new ArgumentNullException(nameof(service));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-			Topic = (configuration ?? throw new ArgumentNullException(nameof(configuration)))["Mqtt:DevicesTopic"];
+			Topic = (configuration ?? throw new ArgumentNullException(nameof(configuration)))["MQTT:DevicesTopic"];
 		}
 
 		public string Topic

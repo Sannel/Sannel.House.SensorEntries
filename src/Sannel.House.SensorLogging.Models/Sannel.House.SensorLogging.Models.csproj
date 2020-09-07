@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.415-beta" />
-    <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.435-beta" />
+    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.521-beta" />
+    <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.515-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
 	<PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="3.0.89" />
   </ItemGroup>

@@ -16,10 +16,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.7.0" />
-    <PackageReference Include="Sannel.House.Base.Data" Version="0.9.420-beta" />
-    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.415-beta" />
-    <PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.473-beta" />
-    <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.435-beta" />
+    <PackageReference Include="Sannel.House.Base.Data" Version="0.9.524-beta" />
+    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.521-beta" />
+    <PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.517-beta" />
+    <PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.515-beta" />
     <PackageReference Include="Sannel.House.Base.Web" Version="0.9.466-beta" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
