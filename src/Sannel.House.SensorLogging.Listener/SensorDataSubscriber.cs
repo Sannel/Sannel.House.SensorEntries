@@ -18,8 +18,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Base.MQTT.Interfaces;
+using Sannel.House.Base.Sensor;
 using Sannel.House.SensorLogging.Interfaces;
-using Sannel.House.SensorLogging.Listener.Models;
 
 namespace Sannel.House.SensorLogging.Listener
 {

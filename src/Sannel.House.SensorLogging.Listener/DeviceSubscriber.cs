@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Base.MQTT.Interfaces;
 using Sannel.House.SensorLogging.Interfaces;
-using Sannel.House.SensorLogging.Listener.Models;
 using Sannel.House.SensorLogging.Models;
 using System;
 using System.Collections.Generic;

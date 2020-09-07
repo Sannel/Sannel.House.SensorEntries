@@ -14,7 +14,6 @@ using Moq;
 using Sannel.House.Base.Sensor;
 using Sannel.House.SensorLogging.Interfaces;
 using Sannel.House.SensorLogging.Listener;
-using Sannel.House.SensorLogging.Listener.Models;
 using Sannel.House.SensorLogging.Models;
 using System;
 using System.Collections.Generic;
