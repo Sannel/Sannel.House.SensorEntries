@@ -10,6 +10,7 @@
    limitations under the License.*/
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Base.MQTT.Interfaces;
 using Sannel.House.SensorLogging.Interfaces;
@@ -26,11 +27,11 @@ namespace Sannel.House.SensorLogging.Listener
 	public class DeviceSubscriber : IMqttTopicSubscriber
 	{
 		private readonly ILogger logger;
-		private readonly ISensorService service;
+		private readonly IServiceProvider provider;
 
-		public DeviceSubscriber(ISensorService service, ILogger<DeviceSubscriber> logger, IConfiguration configuration)
+		public DeviceSubscriber(IServiceProvider provider, ILogger<DeviceSubscriber> logger, IConfiguration configuration)
 		{
-			this.service = service ?? throw new ArgumentNullException(nameof(service));
+			this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			Topic = (configuration ?? throw new ArgumentNullException(nameof(configuration)))["MQTT:DevicesTopic"];
 		}
@@ -46,6 +47,8 @@ namespace Sannel.House.SensorLogging.Listener
 
 		internal async Task MessageAsync(string topic, string message)
 		{
+			using var scope = provider.CreateScope();
+			var service = scope.ServiceProvider.GetService<ISensorService>();
 			try
 			{
 				if(string.IsNullOrWhiteSpace(message))

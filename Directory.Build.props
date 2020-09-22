@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
-		<Major>0</Major>
-		<Minor>5</Minor>
+		<Major Condition="'$(Major)' == ''">0</Major>
+		<Minor Condition="'$(Minor)' == ''">9</Minor>
 		<Patch Condition="'$(Build_BuildId)' != ''">$(Build_BuildId)</Patch>
 		<Patch Condition="'$(Patch)' == ''">0</Patch>
 		<BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>

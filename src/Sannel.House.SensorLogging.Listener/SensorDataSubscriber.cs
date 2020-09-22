@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Sannel.House.Base.MQTT.Interfaces;
 using Sannel.House.Base.Sensor;
@@ -26,11 +27,11 @@ namespace Sannel.House.SensorLogging.Listener
 	public class SensorDataSubscriber : IMqttTopicSubscriber
 	{
 		private readonly ILogger logger;
-		private readonly ISensorService service;
+		private readonly IServiceProvider provider;
 
-		public SensorDataSubscriber(ISensorService service, ILogger<SensorDataSubscriber> logger, IConfiguration configuration)
+		public SensorDataSubscriber(IServiceProvider provider, ILogger<SensorDataSubscriber> logger, IConfiguration configuration)
 		{
-			this.service = service ?? throw new ArgumentNullException(nameof(service));
+			this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
 			this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			Topic = (configuration ?? throw new ArgumentNullException(nameof(configuration)))["MQTT:SensorLoggingTopic"];
 		}
@@ -46,6 +47,8 @@ namespace Sannel.House.SensorLogging.Listener
 
 		internal async Task MessageAsync(string topic, string message)
 		{
+			using var scope = provider.CreateScope();
+			var service = scope.ServiceProvider.GetService<ISensorService>();
 			if(string.IsNullOrWhiteSpace(message))
 			{
 				logger.LogError("Received invalid message on topic {0}", topic);

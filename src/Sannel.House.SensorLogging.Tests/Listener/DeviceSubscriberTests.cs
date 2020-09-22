@@ -10,6 +10,7 @@
    limitations under the License.*/
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Sannel.House.Base.Sensor;
 using Sannel.House.SensorLogging.Interfaces;
@@ -31,8 +32,12 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 		public async Task MessageTestAsync()
 		{
 			var sensorService = new Mock<ISensorService>();
+
+			var collection = new ServiceCollection();
+			collection.AddSingleton(sensorService.Object);
+
 			var config = new Mock<IConfiguration>();
-			var subscriber = new DeviceSubscriber(sensorService.Object,
+			var subscriber = new DeviceSubscriber(collection.BuildServiceProvider(),
 				CreateLogger<DeviceSubscriber>(),
 				config.Object);
 
@@ -78,8 +83,11 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 		public async Task InvalidJsonAsyncTest()
 		{
 			var sensorService = new Mock<ISensorService>();
+			var collection = new ServiceCollection();
+			collection.AddSingleton(sensorService.Object);
+
 			var config = new Mock<IConfiguration>();
-			var subscriber = new DeviceSubscriber(sensorService.Object,
+			var subscriber = new DeviceSubscriber(collection.BuildServiceProvider(),
 				CreateLogger<DeviceSubscriber>(),
 				config.Object);
 
