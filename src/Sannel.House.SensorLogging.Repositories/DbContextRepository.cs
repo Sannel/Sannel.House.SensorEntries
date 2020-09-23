@@ -226,7 +226,25 @@ namespace Sannel.House.SensorLogging.Repositories
 						i.ManufactureId == altId.ManufactureId &&
 						i.ManufactureId != null)
 					);
-					await query.UpdateFromQueryAsync(i => new Device() { DeviceId = deviceMessage.DeviceId });
+					if (await query.AnyAsync())
+					{
+						await query.UpdateFromQueryAsync(i => new Device() { DeviceId = deviceMessage.DeviceId });
+					}
+					else
+					{
+						var device = new Device()
+						{
+							LocalDeviceId = Guid.NewGuid(),
+							DeviceId = deviceMessage.DeviceId,
+							MacAddress = altId.MacAddress,
+							Uuid = altId.Uuid,
+							Manufacture = altId.Manufacture,
+							ManufactureId = altId.ManufactureId
+						};
+
+						await context.Devices.AddAsync(device);
+						await context.SaveChangesAsync();
+					}
 				}
 			}
 		}
