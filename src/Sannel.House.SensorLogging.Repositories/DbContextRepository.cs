@@ -120,12 +120,20 @@ namespace Sannel.House.SensorLogging.Repositories
 				Values = new System.Collections.ObjectModel.Collection<SensorReading>()
 			};
 
-			foreach(var kvp in values)
-			{
-				entry.Values.Add(kvp);
-			}
 
 			var result = await context.SensorEntries.AddAsync(entry);
+
+
+			foreach(var kvp in values)
+			{
+				await context.SensorReadings.AddAsync(new SensorReading()
+				{
+					SensorEntry = result.Entity,
+					SensorReadingId = Guid.NewGuid(),
+					Name = kvp.Key,
+					Value = kvp.Value
+				});
+			}
 
 			await context.SaveChangesAsync();
 			result.State = Microsoft.EntityFrameworkCore.EntityState.Detached;

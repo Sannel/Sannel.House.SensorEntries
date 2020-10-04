@@ -21,6 +21,10 @@ namespace Sannel.House.SensorLogging.Models
 {
 	public class SensorEntry
 	{
+		public SensorEntry()
+		{
+			Values = new Collection<SensorReading>();
+		}
 		/// <summary>
 		/// Gets or sets the sensor entry identifier.
 		/// </summary>
@@ -62,7 +66,7 @@ namespace Sannel.House.SensorLogging.Models
 		/// <value>
 		/// The values.
 		/// </value>
-		public Collection<SensorReading> Values { get; set; } = new Collection<SensorReading>();
+		public Collection<SensorReading> Values { get; set; }
 
 		/// <summary>
 		/// Converts to string.

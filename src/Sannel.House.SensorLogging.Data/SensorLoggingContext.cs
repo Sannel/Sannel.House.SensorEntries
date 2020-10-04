@@ -36,6 +36,14 @@ namespace Sannel.House.SensorLogging.Data
 		public DbSet<Device> Devices => Set<Device>();
 
 		/// <summary>
+		/// Gets the sensor readings.
+		/// </summary>
+		/// <value>
+		/// The sensor readings.
+		/// </value>
+		public DbSet<SensorReading> SensorReadings => Set<SensorReading>();
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="SensorLoggingContext"/> class.
 		/// </summary>
 		/// <param name="options">The options for this context.</param>

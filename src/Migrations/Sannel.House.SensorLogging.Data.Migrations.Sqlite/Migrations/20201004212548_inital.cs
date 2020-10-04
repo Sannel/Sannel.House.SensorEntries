@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
 {
-    public partial class Inital : Migration
+    public partial class inital : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -38,7 +38,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SensorReading",
+                name: "SensorReadings",
                 columns: table => new
                 {
                     SensorReadingId = table.Column<Guid>(nullable: false),
@@ -48,9 +48,9 @@ namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SensorReading", x => x.SensorReadingId);
+                    table.PrimaryKey("PK_SensorReadings", x => x.SensorReadingId);
                     table.ForeignKey(
-                        name: "FK_SensorReading_SensorEntries_SensorEntryId",
+                        name: "FK_SensorReadings_SensorEntries_SensorEntryId",
                         column: x => x.SensorEntryId,
                         principalTable: "SensorEntries",
                         principalColumn: "SensorEntryId",
@@ -88,13 +88,13 @@ namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
                 column: "SensorType");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SensorReading_Name",
-                table: "SensorReading",
+                name: "IX_SensorReadings_Name",
+                table: "SensorReadings",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SensorReading_SensorEntryId",
-                table: "SensorReading",
+                name: "IX_SensorReadings_SensorEntryId",
+                table: "SensorReadings",
                 column: "SensorEntryId");
         }
 
@@ -104,7 +104,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
                 name: "Devices");
 
             migrationBuilder.DropTable(
-                name: "SensorReading");
+                name: "SensorReadings");
 
             migrationBuilder.DropTable(
                 name: "SensorEntries");

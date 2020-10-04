@@ -23,8 +23,7 @@ namespace Sannel.House.SensorLogging.Models
 		/// </summary>
 		public SensorReading()
 		{
-			SensorEntry = new SensorEntry();
-			Name = string.Empty;
+			Name = Name ?? string.Empty;
 		}
 
 		/// <summary>
@@ -59,7 +58,7 @@ namespace Sannel.House.SensorLogging.Models
 		/// The sensor entry.
 		/// </value>
 		[Required]
-		public SensorEntry SensorEntry { get; set; }
+		public SensorEntry? SensorEntry { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name.

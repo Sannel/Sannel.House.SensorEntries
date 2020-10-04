@@ -9,14 +9,14 @@ using Sannel.House.SensorLogging.Data;
 namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
 {
     [DbContext(typeof(SensorLoggingContext))]
-    [Migration("20200823030051_Inital")]
-    partial class Inital
+    [Migration("20201004212548_inital")]
+    partial class inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.7");
+                .HasAnnotation("ProductVersion", "3.1.8");
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.Device", b =>
                 {
@@ -99,7 +99,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.Sqlite.Migrations
 
                     b.HasIndex("SensorEntryId");
 
-                    b.ToTable("SensorReading");
+                    b.ToTable("SensorReadings");
                 });
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
