@@ -17,12 +17,48 @@ namespace Sannel.House.SensorLogging.Models
 {
 	public class AlternateIdMessage
 	{
+		/// <summary>
+		/// Gets or sets the alternate identifier.
+		/// </summary>
+		/// <value>
+		/// The alternate identifier.
+		/// </value>
 		public int? AlternateId { get; set; }
+		/// <summary>
+		/// Gets or sets the date created.
+		/// </summary>
+		/// <value>
+		/// The date created.
+		/// </value>
 		public DateTimeOffset DateCreated { get; set; }
+		/// <summary>
+		/// Gets or sets the UUID.
+		/// </summary>
+		/// <value>
+		/// The UUID.
+		/// </value>
 		public Guid? Uuid { get; set; }
+		/// <summary>
+		/// Gets or sets the mac address.
+		/// </summary>
+		/// <value>
+		/// The mac address.
+		/// </value>
 		public long? MacAddress { get; set; }
-		public string Manufacture { get; set; }
-		public string ManufactureId { get; set; }
+		/// <summary>
+		/// Gets or sets the manufacture.
+		/// </summary>
+		/// <value>
+		/// The manufacture.
+		/// </value>
+		public string? Manufacture { get; set; }
+		/// <summary>
+		/// Gets or sets the manufacture identifier.
+		/// </summary>
+		/// <value>
+		/// The manufacture identifier.
+		/// </value>
+		public string? ManufactureId { get; set; }
 
 	}
 }

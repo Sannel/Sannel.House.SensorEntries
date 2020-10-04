@@ -17,11 +17,29 @@ namespace Sannel.House.SensorLogging.Models
 {
 	public class DeviceMessage
 	{
+		/// <summary>
+		/// Gets or sets the device identifier.
+		/// </summary>
+		/// <value>
+		/// The device identifier.
+		/// </value>
 		public int? DeviceId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the date created.
+		/// </summary>
+		/// <value>
+		/// The date created.
+		/// </value>
 		public DateTimeOffset DateCreated { get; set; }
 
-		public IList<AlternateIdMessage> AlternateIds { get; set; }
+		/// <summary>
+		/// Gets or sets the alternate ids.
+		/// </summary>
+		/// <value>
+		/// The alternate ids.
+		/// </value>
+		public IList<AlternateIdMessage> AlternateIds { get; set; } = new List<AlternateIdMessage>();
 
 	}
 }

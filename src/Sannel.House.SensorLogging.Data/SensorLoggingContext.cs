@@ -20,9 +20,25 @@ namespace Sannel.House.SensorLogging.Data
 {
 	public class SensorLoggingContext : DbContext
 	{
-		public DbSet<SensorEntry> SensorEntries { get; set; }
-		public DbSet<Device> Devices { get; set; }
+		/// <summary>
+		/// Gets the sensor entries.
+		/// </summary>
+		/// <value>
+		/// The sensor entries.
+		/// </value>
+		public DbSet<SensorEntry> SensorEntries => Set<SensorEntry>();
+		/// <summary>
+		/// Gets the devices.
+		/// </summary>
+		/// <value>
+		/// The devices.
+		/// </value>
+		public DbSet<Device> Devices => Set<Device>();
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SensorLoggingContext"/> class.
+		/// </summary>
+		/// <param name="options">The options for this context.</param>
 		public SensorLoggingContext(DbContextOptions options) : base(options)
 		{
 		}

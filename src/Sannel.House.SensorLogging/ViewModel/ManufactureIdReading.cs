@@ -16,9 +16,9 @@ namespace Sannel.House.SensorLogging.ViewModel
 	public class ManufactureIdReading : ReadingBase
 	{
 		[Required(AllowEmptyStrings = false)]
-		public string Manufacture { get; set; }
+		public string Manufacture { get; set; } = string.Empty;
 
 		[Required(AllowEmptyStrings = false)]
-		public string ManufactureId { get; set; }
+		public string ManufactureId { get; set; } = string.Empty;
 	}
 }

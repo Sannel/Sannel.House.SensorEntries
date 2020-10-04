@@ -117,11 +117,11 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 			Assert.Equal(0, addSensorEntryUuidCalled);
 			Assert.Equal(0, addSensorEntryManufactureIdCalled);
 
-			reading.MacAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue);
+			reading.MacAddress = (long)Math.Truncate(Random.NextDouble() * int.MaxValue);
 			reading.Values = new Dictionary<string, double>()
 			{
-				{ "Value1", random.NextDouble() },
-				{ "Value2", random.NextDouble() }
+				{ "Value1", Random.NextDouble() },
+				{ "Value2", Random.NextDouble() }
 			};
 			reading.SensorType = SensorTypes.SoilMoisture;
 
@@ -139,8 +139,8 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 				SensorType = SensorTypes.WindDirection,
 				Values = new Dictionary<string, double>()
 				{
-					{ "Value1", random.NextDouble() },
-					{ "Value2", random.NextDouble() }
+					{ "Value1", Random.NextDouble() },
+					{ "Value2", Random.NextDouble() }
 				}
 			};
 
@@ -160,8 +160,8 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 				SensorType = SensorTypes.WindSpeed,
 				Values = new Dictionary<string, double>()
 				{
-					{ "Value1", random.NextDouble() },
-					{ "Value2", random.NextDouble() }
+					{ "Value1", Random.NextDouble() },
+					{ "Value2", Random.NextDouble() }
 				}
 			};
 
@@ -179,8 +179,8 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 				SensorType = SensorTypes.WindSpeed,
 				Values = new Dictionary<string, double>()
 				{
-					{ "Value1", random.NextDouble() },
-					{ "Value2", random.NextDouble() }
+					{ "Value1", Random.NextDouble() },
+					{ "Value2", Random.NextDouble() }
 				}
 			};
 

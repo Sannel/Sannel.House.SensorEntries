@@ -17,9 +17,8 @@ using System.Text;
 
 namespace Sannel.House.SensorLogging.Tests
 {
-	public class BaseTest : Sannel.House.Tests.BaseTests<SensorLoggingContext>
+	public class BaseTest : Base.Tests.BaseTests<SensorLoggingContext>
 	{
-		public static readonly Random random = new Random();
 		public override Type MigrationAssemblyType 
 			=> typeof(Sannel.House.SensorLogging.Data.Migrations.Sqlite.DesignTimeFactory);
 

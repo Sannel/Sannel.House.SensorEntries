@@ -43,12 +43,12 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 
 			var model = new MacAddressReading()
 			{
-				MacAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue),
+				MacAddress = (long)Math.Truncate(Random.NextDouble() * int.MaxValue),
 				SensorType = Base.Sensor.SensorTypes.Pressure,
 				Values = new Dictionary<string, double>()
 				{
-					{"Value1", random.NextDouble() },
-					{"Value2", random.NextDouble() }
+					{"Value1", Random.NextDouble() },
+					{"Value2", Random.NextDouble() }
 				}
 			};
 
@@ -76,7 +76,9 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 			Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
 
 			controller.ModelState.AddModelError("test", "test");
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			result = await controller.AddWithMacAddress(null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 			var badRequest = Assert.IsAssignableFrom<BadRequestObjectResult>(result);
 			Assert.Equal(400, badRequest.StatusCode);
 			var error = Assert.IsAssignableFrom<ErrorResponseModel>(badRequest.Value);
@@ -97,8 +99,8 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 				SensorType = Base.Sensor.SensorTypes.Lux,
 				Values = new Dictionary<string, double>()
 				{
-					{"Value1", random.NextDouble() },
-					{"Value2", random.NextDouble() }
+					{"Value1", Random.NextDouble() },
+					{"Value2", Random.NextDouble() }
 				}
 			};
 
@@ -126,7 +128,9 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 			Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
 
 			controller.ModelState.AddModelError("test", "test");
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			result = await controller.AddWithMacAddress(null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 			var badRequest = Assert.IsAssignableFrom<BadRequestObjectResult>(result);
 			Assert.Equal(400, badRequest.StatusCode);
 			var error = Assert.IsAssignableFrom<ErrorResponseModel>(badRequest.Value);
@@ -148,8 +152,8 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 				SensorType = Base.Sensor.SensorTypes.Rain,
 				Values = new Dictionary<string, double>()
 				{
-					{"Value1", random.NextDouble() },
-					{"Value2", random.NextDouble() }
+					{"Value1", Random.NextDouble() },
+					{"Value2", Random.NextDouble() }
 				}
 			};
 
@@ -179,7 +183,9 @@ namespace Sannel.House.SensorLogging.Tests.Controllers
 			Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
 
 			controller.ModelState.AddModelError("test", "test");
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			result = await controller.AddWithMacAddress(null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 			var badRequest = Assert.IsAssignableFrom<BadRequestObjectResult>(result);
 			Assert.Equal(400, badRequest.StatusCode);
 			var error = Assert.IsAssignableFrom<ErrorResponseModel>(badRequest.Value);

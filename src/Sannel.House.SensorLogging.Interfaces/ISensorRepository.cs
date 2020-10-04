@@ -36,7 +36,7 @@ namespace Sannel.House.SensorLogging.Interfaces
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
-		Task<Device> GetDeviceByMacAddressAsync(long macAddress);
+		Task<Device?> GetDeviceByMacAddressAsync(long macAddress);
 
 		/// <summary>
 		/// Adds the device by mac address.
@@ -50,7 +50,7 @@ namespace Sannel.House.SensorLogging.Interfaces
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
-		Task<Device> GetDeviceByUuidAsync(Guid uuid);
+		Task<Device?> GetDeviceByUuidAsync(Guid uuid);
 
 		/// <summary>
 		/// Adds the device by UUID.
@@ -65,7 +65,7 @@ namespace Sannel.House.SensorLogging.Interfaces
 		/// <param name="manufacture">The manufacture.</param>
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
-		Task<Device> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId);
+		Task<Device?> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId);
 		/// <summary>
 		/// Adds the device by manufacture identifier.
 		/// </summary>
@@ -80,7 +80,7 @@ namespace Sannel.House.SensorLogging.Interfaces
 		/// <param name="localDeviceId">The local device identifier.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		Task<Device> UpdateDeviceIdAsync(Guid localDeviceId, int? deviceId);
+		Task<Device?> UpdateDeviceIdAsync(Guid localDeviceId, int? deviceId);
 
 		/// <summary>
 		/// Gets the device identifier from local device identifier.

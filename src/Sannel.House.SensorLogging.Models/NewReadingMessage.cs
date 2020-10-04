@@ -18,9 +18,33 @@ namespace Sannel.House.SensorLogging.Models
 {
 	public class NewReadingMessage
 	{
+		/// <summary>
+		/// Gets or sets the device identifier.
+		/// </summary>
+		/// <value>
+		/// The device identifier.
+		/// </value>
 		public int? DeviceId { get; set; }
+		/// <summary>
+		/// Gets or sets the type of the sensor.
+		/// </summary>
+		/// <value>
+		/// The type of the sensor.
+		/// </value>
 		public SensorTypes SensorType { get; set; }
+		/// <summary>
+		/// Gets or sets the creation date.
+		/// </summary>
+		/// <value>
+		/// The creation date.
+		/// </value>
 		public DateTimeOffset CreationDate { get; set; }
-		public Dictionary<string, double> Values { get; set; }
+		/// <summary>
+		/// Gets or sets the values.
+		/// </summary>
+		/// <value>
+		/// The values.
+		/// </value>
+		public Dictionary<string, double> Values { get; set; } = new Dictionary<string, double>();
 	}
 }

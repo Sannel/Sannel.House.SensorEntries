@@ -50,7 +50,7 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 				{
 					new AlternateIdMessage()
 					{
-						MacAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue),
+						MacAddress = (long)Math.Truncate(Random.NextDouble() * int.MaxValue),
 						DateCreated = DateTimeOffset.Now
 					}
 				}

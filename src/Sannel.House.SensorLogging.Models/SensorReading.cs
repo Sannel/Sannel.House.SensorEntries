@@ -18,17 +18,73 @@ namespace Sannel.House.SensorLogging.Models
 {
 	public class SensorReading
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SensorReading"/> class.
+		/// </summary>
+		public SensorReading()
+		{
+			SensorEntry = new SensorEntry();
+			Name = string.Empty;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SensorReading"/> class.
+		/// </summary>
+		/// <param name="entry">The entry.</param>
+		/// <param name="name">The name.</param>
+		/// <exception cref="ArgumentNullException">
+		/// entry
+		/// or
+		/// name
+		/// </exception>
+		public SensorReading(SensorEntry entry, string name)
+		{
+			SensorEntry = entry ?? throw new ArgumentNullException(nameof(entry));
+			Name = name ?? throw new ArgumentNullException(nameof(name));
+		}
+
+		/// <summary>
+		/// Gets or sets the sensor reading identifier.
+		/// </summary>
+		/// <value>
+		/// The sensor reading identifier.
+		/// </value>
 		[Key]
 		public Guid? SensorReadingId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the sensor entry.
+		/// </summary>
+		/// <value>
+		/// The sensor entry.
+		/// </value>
 		[Required]
 		public SensorEntry SensorEntry { get; set; }
 
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
 		[MaxLength(256)]
 		public string Name { get; set; }
 
+		/// <summary>
+		/// Gets or sets the value.
+		/// </summary>
+		/// <value>
+		/// The value.
+		/// </value>
 		public double Value { get; set; }
 
+		/// <summary>
+		/// Performs an implicit conversion from <see cref="KeyValuePair{System.String, System.Double}"/> to <see cref="SensorReading"/>.
+		/// </summary>
+		/// <param name="keyValuePair">The key value pair.</param>
+		/// <returns>
+		/// The result of the conversion.
+		/// </returns>
 		public static implicit operator SensorReading(KeyValuePair<string, double> keyValuePair)
 			=> new SensorReading()
 			{

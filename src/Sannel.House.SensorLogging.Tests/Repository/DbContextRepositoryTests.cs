@@ -26,12 +26,12 @@ namespace Sannel.House.SensorLogging.Tests.Repository
 		[Fact]
 		public void ContructorTest()
 		{
-			using (var context = CreateTestDB())
-			{
-				Assert.Throws<ArgumentNullException>(() => new DbContextRepository(null, null));
-				Assert.Throws<ArgumentNullException>(() => new DbContextRepository(context, null));
-				Assert.NotNull(new DbContextRepository(context, CreateLogger<DbContextRepository>()));
-			}
+			using var context = CreateTestDB();
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+			Assert.Throws<ArgumentNullException>(() => new DbContextRepository(null, null));
+			Assert.Throws<ArgumentNullException>(() => new DbContextRepository(context, null));
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+			Assert.NotNull(new DbContextRepository(context, CreateLogger<DbContextRepository>()));
 		}
 
 		[Fact]
@@ -45,7 +45,7 @@ namespace Sannel.House.SensorLogging.Tests.Repository
 
 			for (var i = 0; i < 100; i++)
 			{
-				var macAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue);
+				var macAddress = (long)Math.Truncate(Random.NextDouble() * int.MaxValue);
 
 				var device = await repo.AddDeviceByMacAddressAsync(macAddress);
 
@@ -156,36 +156,34 @@ namespace Sannel.House.SensorLogging.Tests.Repository
 		[Fact]
 		public async Task AddSensoryEntryAsyncTest()
 		{
-			using (var context = CreateTestDB())
-			{
-				var repo = new DbContextRepository(context, CreateLogger<DbContextRepository>());
+			using var context = CreateTestDB();
+			var repo = new DbContextRepository(context, CreateLogger<DbContextRepository>());
 
-				context.SensorEntries.RemoveRange(context.SensorEntries);
-				await context.SaveChangesAsync();
+			context.SensorEntries.RemoveRange(context.SensorEntries);
+			await context.SaveChangesAsync();
 
-				var device = await repo.AddDeviceByUuidAsync(Guid.NewGuid());
+			var device = await repo.AddDeviceByUuidAsync(Guid.NewGuid());
 
-				var values = new Dictionary<string, double>()
+			var values = new Dictionary<string, double>()
 				{
 					{"Value", 13.5 }
 				};
-				await repo.AddSensorEntryAsync(Base.Sensor.SensorTypes.Temperature,
-					device.LocalDeviceId,
-					values);
+			await repo.AddSensorEntryAsync(Base.Sensor.SensorTypes.Temperature,
+				device.LocalDeviceId,
+				values);
 
-				Assert.Single(context.SensorEntries);
-				var first = context.SensorEntries.Include(i => i.Values).First();
-				Assert.NotEqual(Guid.Empty, first.SensorEntryId);
-				Assert.Equal(device.LocalDeviceId, first.LocalDeviceId);
-				Assert.Equal(SensorTypes.Temperature, first.SensorType);
-				Assert.True(first.CreationDate >= DateTimeOffset.UtcNow.AddMinutes(-1) &&
-					first.CreationDate <= DateTimeOffset.UtcNow.AddMinutes(1));
-				Assert.Single(first.Values);
+			Assert.Single(context.SensorEntries);
+			var first = context.SensorEntries.Include(i => i.Values).First();
+			Assert.NotEqual(Guid.Empty, first.SensorEntryId);
+			Assert.Equal(device.LocalDeviceId, first.LocalDeviceId);
+			Assert.Equal(SensorTypes.Temperature, first.SensorType);
+			Assert.True(first.CreationDate >= DateTimeOffset.UtcNow.AddMinutes(-1) &&
+				first.CreationDate <= DateTimeOffset.UtcNow.AddMinutes(1));
+			Assert.Single(first.Values);
 
-				context.Devices.RemoveRange(context.Devices);
-				context.SensorEntries.RemoveRange(context.SensorEntries);
-				await context.SaveChangesAsync();
-			}
+			context.Devices.RemoveRange(context.Devices);
+			context.SensorEntries.RemoveRange(context.SensorEntries);
+			await context.SaveChangesAsync();
 		}
 	}
 }

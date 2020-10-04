@@ -9,7 +9,7 @@
 		<AssemblyVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</AssemblyVersion>
 		<FileVersion>$(Major).$(Minor).$(Patch).$(BuildNumber)</FileVersion>
 		<Version>$(Major).$(Minor).$(Patch).$(BuildNumber)</Version>
-
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -25,22 +25,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.7" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.8" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.8" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
 		<PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
-		<PackageReference Include="Sannel.House.Base.Data" Version="0.9.524-beta" />
-		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.517-beta" />
-		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.527-beta" />
+		<PackageReference Include="Sannel.House.Base.Data" Version="0.9.556-beta" />
+		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.592-beta" />
+		<PackageReference Include="Sannel.House.Base.Web" Version="0.9.573-beta" />
 		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
 		<PackageReference Include="System.Text.Json" Version="4.7.2" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.7" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.8" />
 	</ItemGroup>
 
 	<ItemGroup>

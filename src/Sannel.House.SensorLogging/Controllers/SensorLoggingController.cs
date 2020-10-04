@@ -55,7 +55,7 @@ namespace Sannel.House.SensorLogging.Controllers
 			}
 			else
 			{
-				logger.LogInformation($"{nameof(AddWithMacAddress)}: Invalid Model for MacAddress {reading?.MacAddress}");
+				logger.LogInformation($"{nameof(AddWithMacAddress)}: Invalid Model for MacAddress {{MacAddress}}", reading.MacAddress);
 				return BadRequest(new ErrorResponseModel(HttpStatusCode.BadRequest, "Invalid Model").FillWithStateDictionary(ModelState));
 			}
 		}
@@ -74,7 +74,7 @@ namespace Sannel.House.SensorLogging.Controllers
 			}
 			else
 			{
-				logger.LogInformation($"{nameof(AddWithUuid)}: Invalid Model for Uuid {reading.Uuid}");
+				logger.LogInformation($"{nameof(AddWithUuid)}: Invalid Model for Uuid {{Uuid}}", reading.Uuid);
 				return BadRequest(new ErrorResponseModel(HttpStatusCode.BadRequest, "Invalid Model").FillWithStateDictionary(ModelState));
 			}
 		}
@@ -94,7 +94,7 @@ namespace Sannel.House.SensorLogging.Controllers
 			}
 			else
 			{
-				logger.LogInformation($"{nameof(AddWithManufactureId)}: Invalid Model for Manufacture {reading.Manufacture} ManufactureId {reading.ManufactureId}");
+				logger.LogInformation($"{nameof(AddWithManufactureId)}: Invalid Model for Manufacture {{Manufacture}} ManufactureId {{ManufactureId}}", reading.Manufacture, reading.ManufactureId);
 				return BadRequest(new ErrorResponseModel(HttpStatusCode.BadRequest, "Invalid Model").FillWithStateDictionary(ModelState));
 			}
 		}

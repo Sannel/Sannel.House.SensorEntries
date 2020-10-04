@@ -24,6 +24,6 @@ namespace Sannel.House.SensorLogging.ViewModel
 		public SensorTypes SensorType { get; set; }
 
 		[Required]
-		public Dictionary<string, double> Values { get; set; }
+		public Dictionary<string, double> Values { get; set; } = new Dictionary<string, double>();
 	}
 }
