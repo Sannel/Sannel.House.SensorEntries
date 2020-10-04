@@ -70,7 +70,9 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 				});
 
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			await subscriber.MessageAsync(null, null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 
 			Assert.Equal(0, updateDeviceInformationCalled);
 
