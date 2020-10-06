@@ -4,6 +4,7 @@ trigger:
 
 variables:
   sdk_version: 5.0.x
+  sdk_support_preview: true
   dockerRepositoryRoot: sannel
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   loggerImageName: house.sensorlogging
