@@ -116,6 +116,12 @@ namespace Sannel.House.SensorLogging
 			var p = Configuration["Db:Provider"];
 			var db = provider.GetService<SensorLoggingContext>();
 
+			if(db is null)
+			{
+				logger.LogError("Unable to get instance of {context}", nameof(SensorLoggingContext));
+				throw new Exception("Unable to get database context");
+			}
+
 			if (string.Compare(p, "mysql", true) == 0
 					|| string.Compare(p, "postgresql", true) == 0
 					|| string.Compare(p, "sqlserver", true) == 0)
