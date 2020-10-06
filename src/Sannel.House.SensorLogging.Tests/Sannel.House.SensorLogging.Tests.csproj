@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
@@ -9,16 +9,16 @@
 	<ItemGroup>
 		<PackageReference Include="altcover" Version="7.1.782" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="Moq" Version="4.14.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
+		<PackageReference Include="Moq" Version="4.14.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.*" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-rc.*" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0-preview-*" />
 		<PackageReference Include="Sannel.House.Base.Models" Version="0.9.547-beta" />
 		<PackageReference Include="Sannel.House.Base.MQTT" Version="0.1.592-beta" />
 		<PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.549-beta" />
 		<PackageReference Include="Sannel.House.Base.Tests" Version="0.9.561-beta" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
-		<PackageReference Include="System.Text.Json" Version="4.7.2" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.*" />
+		<PackageReference Include="System.Text.Json" Version="5.0.0-rc.*" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
 			<PrivateAssets>all</PrivateAssets>

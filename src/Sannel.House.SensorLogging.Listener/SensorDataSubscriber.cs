@@ -49,6 +49,12 @@ namespace Sannel.House.SensorLogging.Listener
 		{
 			using var scope = provider.CreateScope();
 			var service = scope.ServiceProvider.GetService<ISensorService>();
+			if(service is null)
+			{
+				logger.LogWarning("Unable to resolve service {service}", nameof(ISensorService));
+				return;
+			}
+
 			if(string.IsNullOrWhiteSpace(message))
 			{
 				logger.LogError("Received invalid message on topic {0}", topic);
