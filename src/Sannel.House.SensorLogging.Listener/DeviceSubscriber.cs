@@ -49,6 +49,14 @@ namespace Sannel.House.SensorLogging.Listener
 		{
 			using var scope = provider.CreateScope();
 			var service = scope.ServiceProvider.GetService<ISensorService>();
+
+			if(service is null)
+			{
+				logger.LogWarning("Could not resolve service {Service}", nameof(ISensorService));
+
+				return;
+			}
+
 			try
 			{
 				if(string.IsNullOrWhiteSpace(message))
@@ -63,6 +71,12 @@ namespace Sannel.House.SensorLogging.Listener
 
 				options.Converters.Add(new JsonStringEnumConverter());
 				var dmessage = System.Text.Json.JsonSerializer.Deserialize<DeviceMessage>(message, options);
+
+				if(dmessage is null)
+				{
+					logger.LogWarning("Unable to deserialize message {message}", message);
+					return;
+				}
 
 				if(dmessage.DeviceId.HasValue)
 				{

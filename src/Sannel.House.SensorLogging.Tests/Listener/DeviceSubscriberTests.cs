@@ -50,7 +50,7 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 				{
 					new AlternateIdMessage()
 					{
-						MacAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue),
+						MacAddress = (long)Math.Truncate(Random.NextDouble() * int.MaxValue),
 						DateCreated = DateTimeOffset.Now
 					}
 				}
@@ -70,7 +70,9 @@ namespace Sannel.House.SensorLogging.Tests.Listener
 				});
 
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			await subscriber.MessageAsync(null, null);
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 
 			Assert.Equal(0, updateDeviceInformationCalled);
 

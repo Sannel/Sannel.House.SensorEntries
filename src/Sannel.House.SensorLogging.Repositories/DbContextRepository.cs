@@ -120,12 +120,20 @@ namespace Sannel.House.SensorLogging.Repositories
 				Values = new System.Collections.ObjectModel.Collection<SensorReading>()
 			};
 
-			foreach(var kvp in values)
-			{
-				entry.Values.Add(kvp);
-			}
 
 			var result = await context.SensorEntries.AddAsync(entry);
+
+
+			foreach(var kvp in values)
+			{
+				await context.SensorReadings.AddAsync(new SensorReading()
+				{
+					SensorEntry = result.Entity,
+					SensorReadingId = Guid.NewGuid(),
+					Name = kvp.Key,
+					Value = kvp.Value
+				});
+			}
 
 			await context.SaveChangesAsync();
 			result.State = Microsoft.EntityFrameworkCore.EntityState.Detached;
@@ -138,8 +146,8 @@ namespace Sannel.House.SensorLogging.Repositories
 		/// </summary>
 		/// <param name="macAddress">The mac address.</param>
 		/// <returns></returns>
-		public Task<Device> GetDeviceByMacAddressAsync(long macAddress) 
-			=> context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.MacAddress == macAddress);
+		public async Task<Device?> GetDeviceByMacAddressAsync(long macAddress) 
+			=> await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.MacAddress == macAddress);
 
 		/// <summary>
 		/// Gets the device by manufacture identifier.
@@ -147,16 +155,16 @@ namespace Sannel.House.SensorLogging.Repositories
 		/// <param name="manufacture">The manufacture.</param>
 		/// <param name="manufactureId">The manufacture identifier.</param>
 		/// <returns></returns>
-		public Task<Device> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId)
-			=> context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.Manufacture == manufacture && i.ManufactureId == manufactureId);
+		public async Task<Device?> GetDeviceByManufactureIdAsync(string manufacture, string manufactureId)
+			=> await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.Manufacture == manufacture && i.ManufactureId == manufactureId);
 
 		/// <summary>
 		/// Gets the device by UUID.
 		/// </summary>
 		/// <param name="uuid">The UUID.</param>
 		/// <returns></returns>
-		public Task<Device> GetDeviceByUuidAsync(Guid uuid)
-			=> context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.Uuid == uuid);
+		public async Task<Device?> GetDeviceByUuidAsync(Guid uuid)
+			=> await context.Devices.AsNoTracking().FirstOrDefaultAsync(i => i.Uuid == uuid);
 
 		/// <summary>
 		/// Gets the device identifier from local device identifier.
@@ -175,7 +183,7 @@ namespace Sannel.House.SensorLogging.Repositories
 		/// <param name="localDeviceId">The local device identifier.</param>
 		/// <param name="deviceId">The device identifier.</param>
 		/// <returns></returns>
-		public async Task<Device> UpdateDeviceIdAsync(Guid localDeviceId, int? deviceId)
+		public async Task<Device?> UpdateDeviceIdAsync(Guid localDeviceId, int? deviceId)
 		{
 			var device = await context.Devices.FirstOrDefaultAsync(i => i.LocalDeviceId == localDeviceId);
 			if(device is null)

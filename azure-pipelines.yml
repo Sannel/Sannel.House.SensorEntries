@@ -3,7 +3,8 @@ trigger:
 - develop
 
 variables:
-  sdk_version: 3.1.x
+  sdk_version: 5.0.x
+  sdk_support_preview: true
   dockerRepositoryRoot: sannel
   dockerTagBase: $(Build.SourceBranchName)-$(Build.BuildId)
   loggerImageName: house.sensorlogging
@@ -11,7 +12,7 @@ variables:
   imageTag: $(Build.SourceBranchName)-$(Build.BuildId)
   projectFolder: Sannel.House.SensorLogging
   listenerProjectFolder: Sannel.House.SensorLogging.Listener
-  tagVersion: 3.1
+  tagVersion: 5.0
   tagCodeName: buster
   hasTests: true
   Major: 0
@@ -19,6 +20,10 @@ variables:
 
 resources:
   repositories:
+    - repository: sensorlogging
+      type: github
+      name: Sannel/Sannel.House.SensorLogging
+      endpoint: Sannel
     - repository: templates
       type: github
       name: Sannel/Sannel.House.BuildScripts
@@ -64,14 +69,14 @@ jobs:
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
 
-- template: tasks/docker/linux-x64.yaml@templates
+- template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(projectFolder)
     imageName: $(loggerImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: sensorlogging
 
-- template: tasks/docker/linux-x64.yaml@templates
+- template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
     project: $(listenerProjectFolder)
     imageName: $(listenerImageName)

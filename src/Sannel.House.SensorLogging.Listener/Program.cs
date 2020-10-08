@@ -91,9 +91,7 @@ namespace Sannel.House.SensorLogging.Listener
 			services.AddTransient<IMqttTopicSubscriber, SensorDataSubscriber>();
 			services.AddTransient<IMqttTopicSubscriber, DeviceSubscriber>();
 
-			services.AddMqttService(configuration["MQTT:Server"],
-				configuration["MQTT:DefaultTopic"],
-				configuration.GetValue<int?>("MQTT:Port"));
+			services.AddMqttService(configuration);
 		}
 	}
 }

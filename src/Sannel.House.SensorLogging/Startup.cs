@@ -97,9 +97,7 @@ namespace Sannel.House.SensorLogging
 				s.Description = "Project for logging sensor data";
 			});
 
-			services.AddMqttService(Configuration["MQTT:Server"],
-				Configuration["MQTT:DefaultTopic"],
-				Configuration.GetValue<int?>("MQTT:Port"));
+			services.AddMqttService(Configuration);
 
 			services.AddTransient<ISensorService, SensorService>();
 
@@ -117,6 +115,12 @@ namespace Sannel.House.SensorLogging
 
 			var p = Configuration["Db:Provider"];
 			var db = provider.GetService<SensorLoggingContext>();
+
+			if(db is null)
+			{
+				logger.LogError("Unable to get instance of {context}", nameof(SensorLoggingContext));
+				throw new Exception("Unable to get database context");
+			}
 
 			if (string.Compare(p, "mysql", true) == 0
 					|| string.Compare(p, "postgresql", true) == 0
@@ -147,9 +151,6 @@ namespace Sannel.House.SensorLogging
 			app.UseAuthorization();
 			//app.UseHttpsRedirection();
 
-
-			app.UseHouseRobotsTxt();
-
 			app.UseOpenApi();
 			app.UseReDoc();
 
@@ -157,6 +158,7 @@ namespace Sannel.House.SensorLogging
 			{
 				i.MapControllers();
 				i.MapHouseHealthChecks("/health");
+				i.MapHouseRobotsTxt();
 			});
 
 		}

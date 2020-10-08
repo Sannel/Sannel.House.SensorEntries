@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFrameworks>netcoreapp3.1;netstandard2.1</TargetFrameworks>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net5.0</TargetFrameworks>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.7" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-rc.*" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0-rc.*">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-rc.*" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
-    <ProjectReference Include="..\..\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
+		<ProjectReference Include="..\..\Sannel.House.SensorLogging.Models\Sannel.House.SensorLogging.Models.csproj" />
+	</ItemGroup>
 
 </Project>

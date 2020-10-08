@@ -8,6 +8,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using Sannel.House.Base.MQTT.Interfaces;
 using Sannel.House.SensorLogging.Interfaces;
 using System;
@@ -48,6 +49,7 @@ namespace Sannel.House.SensorLogging.Tests.Services
 		[Fact]
 		public void SensorServiceConstructorTest()
 		{
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			Assert.Throws<ArgumentNullException>("mqttClient", () => new SensorService(null, null, null, null));
 			var mqttClient = new Mock<IMqttClientPublishService>();
 			Assert.Throws<ArgumentNullException>("repository", () => new SensorService(mqttClient.Object, null, null, null));
@@ -55,6 +57,7 @@ namespace Sannel.House.SensorLogging.Tests.Services
 			Assert.Throws<ArgumentNullException>("configuration", () => new SensorService(mqttClient.Object, repository.Object, null, null));
 			var configuration = new ConfigurationBuilder().Build();
 			Assert.Throws<ArgumentNullException>("logger", () => new SensorService(mqttClient.Object, repository.Object, configuration, null));
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 		}
 
 		[Fact]
@@ -69,7 +72,7 @@ namespace Sannel.House.SensorLogging.Tests.Services
 			}, out var mqttClient,
 			out var repository);
 
-			var testMacAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue);
+			var testMacAddress = (long)Math.Truncate(Random.NextDouble() * int.MaxValue);
 			var testCreationDate = DateTimeOffset.Now;
 			var getDeviceCalled = 0;
 			var addDeviceCalled = 0;
@@ -97,11 +100,11 @@ namespace Sannel.House.SensorLogging.Tests.Services
 					return testDevice;
 				});
 
-			var testSensorType = (SensorTypes)random.Next((int)SensorTypes.Unknown, (int)SensorTypes.SoilTemperature);
+			var testSensorType = (SensorTypes)Random.Next((int)SensorTypes.Unknown, (int)SensorTypes.SoilTemperature);
 			var testValues = new Dictionary<string, double>()
 			{
-				{"Value1", random.NextDouble() * 10000 },
-				{"Value2", random.NextDouble() * 10000 }
+				{"Value1", Random.NextDouble() * 10000 },
+				{"Value2", Random.NextDouble() * 10000 }
 			};
 
 			repository.Setup(i => i.AddSensorEntryAsync(It.IsAny<SensorTypes>(),
@@ -222,11 +225,11 @@ namespace Sannel.House.SensorLogging.Tests.Services
 					return testDevice;
 				});
 
-			var testSensorType = (SensorTypes)random.Next((int)SensorTypes.Unknown, (int)SensorTypes.SoilTemperature);
+			var testSensorType = (SensorTypes)Random.Next((int)SensorTypes.Unknown, (int)SensorTypes.SoilTemperature);
 			var testValues = new Dictionary<string, double>()
 			{
-				{"Value1", random.NextDouble() * 10000 },
-				{"Value2", random.NextDouble() * 10000 }
+				{"Value1", Random.NextDouble() * 10000 },
+				{"Value2", Random.NextDouble() * 10000 }
 			};
 
 			repository.Setup(i => i.AddSensorEntryAsync(It.IsAny<SensorTypes>(),
@@ -351,11 +354,11 @@ namespace Sannel.House.SensorLogging.Tests.Services
 					return testDevice;
 				});
 
-			var testSensorType = (SensorTypes)random.Next((int)SensorTypes.Unknown, (int)SensorTypes.SoilTemperature);
+			var testSensorType = (SensorTypes)Random.Next((int)SensorTypes.Unknown, (int)SensorTypes.SoilTemperature);
 			var testValues = new Dictionary<string, double>()
 			{
-				{"Value1", random.NextDouble() * 10000 },
-				{"Value2", random.NextDouble() * 10000 }
+				{"Value1", Random.NextDouble() * 10000 },
+				{"Value2", Random.NextDouble() * 10000 }
 			};
 
 			repository.Setup(i => i.AddSensorEntryAsync(It.IsAny<SensorTypes>(),
@@ -449,19 +452,21 @@ namespace Sannel.House.SensorLogging.Tests.Services
 			}, out var mqttClient,
 			out var repository);
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 			await Assert.ThrowsAsync<ArgumentNullException>("deviceMessage", async () => await service.UpdateDeviceInformationFromMessageAsync(null));
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 
 			var testMessage = new DeviceMessage()
 			{
-				DeviceId = random.Next(100, 30000),
+				DeviceId = Random.Next(100, 30000),
 				DateCreated = DateTimeOffset.Now,
 				AlternateIds = new List<AlternateIdMessage>()
 				{
 					new AlternateIdMessage()
 					{
-						AlternateId = random.Next(100, 40000),
+						AlternateId = Random.Next(100, 40000),
 						DateCreated = DateTimeOffset.Now.AddDays(1),
-						MacAddress = (long)Math.Truncate(random.NextDouble() * int.MaxValue),
+						MacAddress = (long)Math.Truncate(Random.NextDouble() * int.MaxValue),
 						Uuid = Guid.NewGuid(),
 						Manufacture = Guid.NewGuid().ToString(),
 						ManufactureId = Guid.NewGuid().ToString()

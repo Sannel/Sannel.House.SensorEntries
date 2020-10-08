@@ -80,7 +80,7 @@ namespace Sannel.House.SensorLogging.Services
 
 			if(device is null)
 			{
-				logger.LogError($"Unable to create device for macAddress {deviceMacAddress}");
+				logger.LogError("Unable to create device for macAddress {deviceMacAddress}", deviceMacAddress);
 				throw new NullReferenceException("Unable to create a device for some reason");
 			}
 

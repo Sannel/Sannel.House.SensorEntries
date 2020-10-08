@@ -15,7 +15,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.7")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -100,7 +100,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.SqlServer.Migrations
 
                     b.HasIndex("SensorEntryId");
 
-                    b.ToTable("SensorReading");
+                    b.ToTable("SensorReadings");
                 });
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>

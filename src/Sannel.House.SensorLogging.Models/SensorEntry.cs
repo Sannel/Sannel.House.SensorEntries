@@ -21,19 +21,59 @@ namespace Sannel.House.SensorLogging.Models
 {
 	public class SensorEntry
 	{
+		public SensorEntry()
+		{
+			Values = new Collection<SensorReading>();
+		}
+		/// <summary>
+		/// Gets or sets the sensor entry identifier.
+		/// </summary>
+		/// <value>
+		/// The sensor entry identifier.
+		/// </value>
 		[Key]
 		public Guid SensorEntryId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the local device identifier.
+		/// </summary>
+		/// <value>
+		/// The local device identifier.
+		/// </value>
 		[Required]
 		public Guid LocalDeviceId { get; set; }
 
+		/// <summary>
+		/// Gets or sets the type of the sensor.
+		/// </summary>
+		/// <value>
+		/// The type of the sensor.
+		/// </value>
 		[Required]
 		public SensorTypes SensorType { get; set; }
 
+		/// <summary>
+		/// Gets or sets the creation date.
+		/// </summary>
+		/// <value>
+		/// The creation date.
+		/// </value>
 		public DateTimeOffset CreationDate { get; set; }
 
-		public Collection<SensorReading> Values{get;set;}
+		/// <summary>
+		/// Gets or sets the values.
+		/// </summary>
+		/// <value>
+		/// The values.
+		/// </value>
+		public Collection<SensorReading> Values { get; set; }
 
+		/// <summary>
+		/// Converts to string.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String" /> that represents this instance.
+		/// </returns>
 		public override string ToString() 
 			=> $@"SensorEntryId={SensorEntryId}
 LocalDeviceId={LocalDeviceId}

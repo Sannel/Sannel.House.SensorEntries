@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.7" />
-    <PackageReference Include="Sannel.House.Base.Models" Version="0.9.521-beta" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0-rc.*" />
+		<PackageReference Include="Sannel.House.Base.Models" Version="0.9.547-beta" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
-    <ProjectReference Include="..\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Sannel.House.SensorLogging.Data\Sannel.House.SensorLogging.Data.csproj" />
+		<ProjectReference Include="..\Sannel.House.SensorLogging.Interfaces\Sannel.House.SensorLogging.Interfaces.csproj" />
+	</ItemGroup>
 
 </Project>

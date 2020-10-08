@@ -16,7 +16,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.7")
+                .HasAnnotation("ProductVersion", "3.1.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.Device", b =>
@@ -100,7 +100,7 @@ namespace Sannel.House.SensorLogging.Data.Migrations.PostgreSQL.Migrations
 
                     b.HasIndex("SensorEntryId");
 
-                    b.ToTable("SensorReading");
+                    b.ToTable("SensorReadings");
                 });
 
             modelBuilder.Entity("Sannel.House.SensorLogging.Models.SensorReading", b =>
