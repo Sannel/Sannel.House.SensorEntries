@@ -2,6 +2,11 @@ trigger:
 - master
 - develop
 
+pr:
+- master
+- develop
+- feature/*
+
 variables:
   sdk_version: 5.0.x
   sdk_support_preview: true
@@ -14,6 +19,7 @@ variables:
   listenerProjectFolder: Sannel.House.SensorLogging.Listener
   tagVersion: 5.0
   tagCodeName: buster
+  repositoryName: Sannel.House.SensorLogging
   hasTests: true
   Major: 0
   Minor: 9
@@ -39,6 +45,7 @@ jobs:
     project: $(projectFolder)
     imageName: $(loggerImageName)
     jobName: sensorlogging
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -50,6 +57,7 @@ jobs:
     imageName: $(listenerImageName)
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -59,6 +67,7 @@ jobs:
     imageName: $(loggerImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: sensorlogging
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-arm.yaml@templates
   parameters:
@@ -68,6 +77,7 @@ jobs:
     imageName: $(listenerImageName)
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
@@ -75,6 +85,7 @@ jobs:
     imageName: $(loggerImageName)
     dockerRepositoryName: $(dockerRepositoryName)
     jobName: sensorlogging
+    repositoryName: $(repositoryName)
 
 - template: tasks/docker/linux-x64-alpine.yaml@templates
   parameters:
@@ -82,3 +93,4 @@ jobs:
     imageName: $(listenerImageName)
     dockerRepositoryName: $(listenerDockerRepositoryName)
     jobName: sensorlistener
+    repositoryName: $(repositoryName)
