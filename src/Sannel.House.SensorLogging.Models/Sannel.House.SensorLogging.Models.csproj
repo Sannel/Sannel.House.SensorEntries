@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
@@ -8,8 +8,8 @@
 	<ItemGroup>
 		<PackageReference Include="Sannel.House.Base.Models" Version="0.9.547-beta" />
 		<PackageReference Include="Sannel.House.Base.Sensor" Version="0.9.549-beta" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0-rc.*" />
-		<PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.0.0-preview.*" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.*" />
+		<PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="5.*" />
 	</ItemGroup>
 
 </Project>
